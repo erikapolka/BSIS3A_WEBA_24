@@ -9,8 +9,6 @@ class Model extends Database{
             $this->table = strtolower($this::class) . 's'; //users
         }
     }
-    
-    
     public function findAll(){
         $query = "select * from $this->table";
         $result = $this->query($query);
