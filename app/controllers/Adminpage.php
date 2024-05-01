@@ -21,8 +21,6 @@ class Adminpage extends Controller
             $_SESSION['total' . $userType] = count($totalUsers);
         }
 
-
-
         $this->settingChange();
         $_SESSION['currentPage'] =  'dashboard';
         $this->view('admin/dashboard');
@@ -30,7 +28,26 @@ class Adminpage extends Controller
 
     public function studentlist()
     {
-        $this->addStudent();
+
+        if(isset($_POST['searchStudent'])) {
+            $this->addStudent();
+            $this->settingChange();
+            $_SESSION['currentPage'] =  'studentList';
+    
+            $x = new Student();
+            $y = new Section();
+
+
+            $rows = $x->findAll();
+            $class = $x->classList();
+            $classOption = $y->findAll();
+            $this->view('admin/student_list', [
+                'rows' => $rows, 'class' => $class, 'classOption' => $classOption
+            ]);
+
+        }
+
+        
         $this->settingChange();
         $_SESSION['currentPage'] =  'studentList';
 
@@ -38,11 +55,23 @@ class Adminpage extends Controller
         $y = new Section();
         $rows = $x->findAll();
         $class = $x->classList();
-        $classOption = $y->findAll();
         $this->view('admin/student_list', [
-            'rows' => $rows, 'class' => $class, 'classOption' => $classOption
+            'rows' => $rows, 'class' => $class
         ]);
     }
+
+    public function viewStudent(){
+        if(count($_POST) > 0){
+            $id = $_POST['stud_id'];
+
+            $x = new Student();
+            $rows = $x->where($id);
+
+            foreach($rows as $row){
+                $_SESSION['studname'] = $row->stud_fname;
+            }
+        }
+    }    
 
     public function settings()
     {
@@ -96,20 +125,27 @@ class Adminpage extends Controller
     }
 
 
-    public function addStudent()
+    public function addstudent()
     {
-        $addStudent = new Student();
+        $x = new Student();
+        $y = new Section();
+        $rows = $x->findAll();
+        $class = $x->classList();
+        $classOption = $y->findAll();
 
         if (count($_POST) > 0) {
-
             $_POST['stud_pass'] = '@Student01';
-
-            $checkId = $addStudent->where(['stud_code' => $_POST['stud_code']]);
+            $checkId = $x->where(['stud_code' => $_POST['stud_code']]);
             if ($checkId) {
-                echo 'error';
+                $_SESSION['errorId'] = showAlert('The Student ID "' . $_POST['stud_code'] . '" is already taken!', 'danger');
             } else {
-                $addStudent->insert($_POST);
+                $x->insert($_POST);
+                redirect('adminpage/studentlist');
+                exit();
             }
         }
+        $this->view('admin/add_student', [
+            'rows' => $rows, 'class' => $class, 'classOption' => $classOption
+        ]);
     }
 }

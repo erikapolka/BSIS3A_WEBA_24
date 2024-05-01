@@ -129,4 +129,5 @@ class Model extends Database
 
         return $classList;
     }
+
 }

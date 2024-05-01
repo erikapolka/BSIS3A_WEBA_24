@@ -3,7 +3,7 @@ session_start();
 // Check if the user is not logged in (no active session)
 if (!isset($_SESSION['userId']) || $_SESSION['currentUser'] !== 'faculty') {
     // Redirect the user to the login page
-    header("Location: 404");
+    redirect("404");
     exit(); // Stop further execution of the script
 }
 // If the user is logged in, continue to the restricted page

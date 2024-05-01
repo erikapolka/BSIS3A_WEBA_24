@@ -9,7 +9,8 @@
         </div>
         <div class="col-6 col-sm-6 text-right d-flex justify-content-end">
             <!-- Add button -->
-            <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#addStudentModal">Add</button>
+            <a href="<?= ROOT ?>/adminpage/addstudent" class="btn btn-primary mb-2">Add</a>
+            <!-- <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#addStudentModal">Add</button> -->
         </div>
     </div>
     <div class="row">
@@ -35,9 +36,9 @@
                             <td class="px-5 py-2"><?= $item->stud_lname . ", "  . $item->stud_fname . " "  . $item->stud_mname ?></td>
                             <td class="text-center py-2"><?= isset($class[$item->stud_class]) ? $class[$item->stud_class] : 'N/A' ?></td>
                             <td class="text-start py-2"><?= $item->stud_email ?></td>
-                            <td class="d-flex justify-content-center py-2"><a href="<?= md5($item->id) ?>" class="btn btn-success">
+                            <td class="d-flex justify-content-center py-2"><button class="btn btn-success" data-toggle="modal" data-target="#viewStudentModal">
                                     <i class="fa fa-eye" ></i>
-                                </a></td>
+                    </button></td>
                         </tr>
                     <?php } ?>
                 </tbody>
@@ -61,66 +62,28 @@
 </div>
 
 
-<!-- Student Modal -->
-<div class="modal fade" id="addStudentModal" tabindex="-1" role="dialog" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+<!-- View Student Modal -->
+<div class="modal fade" id="viewStudentModal" tabindex="-1" role="dialog" aria-labelledby="viewStudent" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addStudentModalLabel">Add New Student</h5>
-        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true"></span>
+        <h5 class="modal-title" id="viewStudent">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <!-- Form for adding a new student -->
-        <form action="" method="post">
-          <div class="form-group">
-            <label for="student_id"><strong>Student ID</strong></label>
-            <input type="text" class="form-control mb-3" id="student_id" name="stud_code" placeholder="MA12345678" required autocomplete="off">
-          </div>
-
-          <div class="row d-flex justify-content-start mb-3">
-          <div class="form-group col-12 mb-2">
-            <label for="first_name"><strong>First Name</strong></label>
-            <input type="text" class="form-control" id="first_name" name="stud_fname" required autocomplete="off">
-          </div>
-          <div class="form-group col-6">
-            <label for="middle_name"><strong>Middle Name</strong></label>
-            <input type="text" class="form-control" id="middle_name" name="stud_mname" autocomplete="off">
-          </div>
-          <div class="form-group col-6">
-            <label for="last_name"><strong>Last Name</strong></label>
-            <input type="text" class="form-control" id="last_name" name="stud_lname" required autocomplete="off">
-          </div>
-          </div>
+        <?php foreach($rows as $info){
+          ?><p><?= $info->stud_code?></p>
 
 
-          
-          <div class="row mb-3">
 
-          
-    <div class="form-group col-4">
-        <label for="section"><strong>Course, Yr.&Sec</strong></label>
-        <select id="sectionSelect" class="form-select" required name="stud_class">
-            <option value="">Search</option>
-            <?php foreach ($classOption as $option) { ?>
-                <option value="<?= $option->id ?>"><?= $option->class_course . "-" . $option->class_level . $option->class_section ?></option>
-            <?php } ?>
-        </select>
-    </div>
-
-
-          <div class="form-group col-8">
-            <label for="email"><strong>Email</strong></label>
-            <input type="email" class="form-control" id="email" name="stud_email" placeholder="sample@email.com" required autocomplete="off">
-          </div>
-          </div>
-          <div class="form-group mb-4">
-            <label for="password"><strong>Password</strong> <i class="">(default)</i></label>
-            <input type="text" class="form-control" name="stud_pass" disabled placeholder="@Student01">
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Save</button>
-        </form>
+      <?php } ?>
+        This is a simple modal example.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <!-- Add more buttons or actions here if needed -->
       </div>
     </div>
   </div>

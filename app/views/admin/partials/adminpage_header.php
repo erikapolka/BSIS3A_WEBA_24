@@ -3,7 +3,7 @@ $theme = $_SESSION['theme'];
 // Check if the user is not logged in (no active session)
 if (!isset($_SESSION['userId']) || $_SESSION['currentUser'] !== 'admin') {
     // Redirect the user to the login page
-    header("Location: 404");
+    redirect("404");
     exit(); // Stop further execution of the script
 }
 $currentPage = $_SESSION['currentPage'];
@@ -168,6 +168,9 @@ $currentPage = $_SESSION['currentPage'];
             /* Align the button vertically */
             transform: translateY(-50%);
             /* Center the button vertically */
+        }
+        .dropdown:hover{
+            cursor: pointer;
         }
 
         label {

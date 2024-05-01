@@ -46,7 +46,7 @@
                             <div class="col-lg-11">
                                 <div class="form-group d-flex align-items-center mb-3">
                                     <i class="fa fa-user fa-2x text-<?= $theme ?>"></i>
-                                    <input type="text" name="login_id" id="id" autocomplete="off" class="form-control" placeholder="Username" style="margin-left: .5rem;" />
+                                    <input type="text" name="login_id" id="id" autocomplete="off" value="<?= get_var('login_id') ?>" class="form-control" placeholder="Username" style="margin-left: .5rem;" />
 
                                 </div>
                                 <div class="form-group d-flex align-items-center">

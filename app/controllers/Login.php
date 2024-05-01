@@ -4,8 +4,7 @@ class Login extends Controller
 {
     public function index()
     {
-        settingUpdate();
-        $this->view('login');
+        
 
         if (isset($_POST['login_submit'])) {
             $user = $_POST['login_id'];
@@ -16,10 +15,6 @@ class Login extends Controller
                 // Set error message
 
                 $_SESSION["errors"] = showAlert('Username and Password cannot be empty.', 'danger');
-
-                // Redirect back to the form
-                redirect("login");
-                exit();
             } else {
                 // No errors, proceed with authentication
                 $student = new Student();
@@ -56,13 +51,13 @@ class Login extends Controller
                             exit();
                         } else {
                             $_SESSION["errors"] = showAlert('Invalid username or password.', 'danger');
-                            header("Location: login");
-                            exit();
                         }
                     }
                 }
             }
         }
+        settingUpdate();
+        $this->view('login');
     }
 
     public function logout()
