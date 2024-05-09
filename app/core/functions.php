@@ -1,4 +1,5 @@
 <?php
+
 function show($stuff)
 {
 
@@ -18,6 +19,16 @@ function get_var($key)
     if (isset($_POST[$key])) {
         return $_POST[$key];
     }
+}
+
+function currentPage($page)
+{
+    if (!isset($_SESSION['currentPage'])) {
+        $_SESSION['currentPage'] = 'dashboard';
+    } else {
+        $_SESSION['currentPage'] = $page;
+    }
+    
 }
 
 function showAlert($message, $type = 'info')

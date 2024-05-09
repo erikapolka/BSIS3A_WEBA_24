@@ -23,6 +23,23 @@ class Model extends Database
         }
     }
 
+    public function search($searchTerm, $searchColumns)
+    {
+        $query = "SELECT * FROM $this->table WHERE ";
+        $params = [];
+
+        foreach ($searchColumns as $column) {
+            $query .= "$column LIKE ? OR ";
+            $params[] = "%$searchTerm%";
+        }
+
+        $query = rtrim($query, "OR "); // Remove the last 'OR'
+
+        return $this->query($query, $params);
+    }
+
+
+
     public function where($data, $data_not = [])
     {
         $keys = array_keys($data);
@@ -80,6 +97,20 @@ class Model extends Database
         return false;
     }
 
+    public function updateDefault($excludeId, $column, $value, $idColumn = "id")
+    {
+        // Update all rows to 0
+        $query = "UPDATE $this->table SET $column = 0";
+        $this->query($query);
+    
+        // Update the specific row to 1
+        $query = "UPDATE $this->table SET $column = :value WHERE $idColumn = :excludeId";
+        $data = array('value' => $value, 'excludeId' => $excludeId);
+        $this->query($query, $data);
+    
+        return false;
+    }
+
 
     public function update1($id, $data, $column = 'id')
     {
@@ -129,5 +160,4 @@ class Model extends Database
 
         return $classList;
     }
-
 }

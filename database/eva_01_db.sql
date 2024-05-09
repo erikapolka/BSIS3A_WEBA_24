@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2024 at 03:02 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: May 09, 2024 at 04:46 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,30 @@ SET time_zone = "+00:00";
 --
 -- Database: `eva_01_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `acads`
+--
+
+CREATE TABLE `acads` (
+  `id` int(11) NOT NULL,
+  `academic_year` varchar(21) NOT NULL,
+  `semester` int(5) NOT NULL,
+  `ay_default` int(3) NOT NULL,
+  `status` int(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `acads`
+--
+
+INSERT INTO `acads` (`id`, `academic_year`, `semester`, `ay_default`, `status`) VALUES
+(1, '2023-2024', 1, 0, 2),
+(2, '2023-2024', 2, 1, 2),
+(3, '2023-2024', 1, 0, 2),
+(4, '2024-2025', 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -49,6 +73,18 @@ INSERT INTO `admins` (`id`, `admin_code`, `admin_fname`, `admin_mname`, `admin_l
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `criterias`
+--
+
+CREATE TABLE `criterias` (
+  `id` int(11) NOT NULL,
+  `criteria` varchar(21) NOT NULL,
+  `order_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `facultys`
 --
 
@@ -73,6 +109,20 @@ INSERT INTO `facultys` (`id`, `faculty_code`, `faculty_fname`, `faculty_mname`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `questions`
+--
+
+CREATE TABLE `questions` (
+  `id` int(11) NOT NULL,
+  `acads_id` int(11) NOT NULL,
+  `question` varchar(100) NOT NULL,
+  `order_by` int(11) NOT NULL,
+  `criterias_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sections`
 --
 
@@ -89,7 +139,8 @@ CREATE TABLE `sections` (
 
 INSERT INTO `sections` (`id`, `class_course`, `class_level`, `class_section`) VALUES
 (1, 'BSIS', 3, 'A'),
-(2, 'BSOM', 1, 'A');
+(2, 'BSOM', 1, 'A'),
+(3, 'BSIS', 1, 'A');
 
 -- --------------------------------------------------------
 
@@ -137,16 +188,40 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `stud_code`, `stud_fname`, `stud_mname`, `stud_lname`, `stud_class`, `stud_email`, `stud_pass`, `stud_date_added`) VALUES
-(1, 'MA21011456', 'Genesis', 'Retardo', 'Roxas', 1, 'genesisroxas4@gmail.com', 'admin123', '2024-04-09'),
-(4, '0123', 'Jane', 'D', 'Doe', 2, 'jane@g.com', '123', '2024-04-09'),
-(5, '211', 'was', 'sadsa', 'sadsa', 1, 'g@g.com', '@Student01', '0000-00-00'),
-(6, '1234', 'Lennie', 'Martin', 'Roxas', 1, 'l@g.com', '@Student01', '0000-00-00'),
-(7, 'ma23232', 'dsd', 'wdwd', 'wdwdw', 1, 'g@a.com', '@Student01', '0000-00-00'),
-(8, '01234', 'hi', 'fes', 'sefs', 2, 'g@g.com', '@Student01', '0000-00-00');
+(1, 'MA21011456', 'Genesis', 'Retardo', 'Roxas', 1, 'genesisroxas4@gmail.com', '@Student01', '2024-04-09'),
+(13, '123444', 'cdbhs', 'gygye', 'dsfsdf', 1, 'g@g.com', '@Student01', '0000-00-00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subjects`
+--
+
+CREATE TABLE `subjects` (
+  `id` int(11) NOT NULL,
+  `code` varchar(21) NOT NULL,
+  `subject` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `subjects`
+--
+
+INSERT INTO `subjects` (`id`, `code`, `subject`) VALUES
+(1, 'WEBA-323', 'Web Development 323'),
+(2, 'EFM-323', 'Financial Management 323'),
+(3, 'EPC-323', 'Partnership and Corporation 323'),
+(4, 'WEBA-313', 'wEB');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `acads`
+--
+ALTER TABLE `acads`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `admins`
@@ -155,9 +230,21 @@ ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `criterias`
+--
+ALTER TABLE `criterias`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `facultys`
 --
 ALTER TABLE `facultys`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `questions`
+--
+ALTER TABLE `questions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -179,8 +266,20 @@ ALTER TABLE `students`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `subjects`
+--
+ALTER TABLE `subjects`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `acads`
+--
+ALTER TABLE `acads`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `admins`
@@ -189,16 +288,28 @@ ALTER TABLE `admins`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `criterias`
+--
+ALTER TABLE `criterias`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `facultys`
 --
 ALTER TABLE `facultys`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `questions`
+--
+ALTER TABLE `questions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `sections`
 --
 ALTER TABLE `sections`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -210,7 +321,13 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `subjects`
+--
+ALTER TABLE `subjects`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

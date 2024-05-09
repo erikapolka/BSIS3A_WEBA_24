@@ -20,37 +20,148 @@ class Adminpage extends Controller
             // Count the total users and store the count in a session variable
             $_SESSION['total' . $userType] = count($totalUsers);
         }
+        $year = new Acad();
 
+        $row = $year->where(['ay_default' => '1']);
         $this->settingChange();
-        $_SESSION['currentPage'] =  'dashboard';
-        $this->view('admin/dashboard');
+        currentPage('dashboard');
+
+        $this->view('admin/dashboard', ['rows' => $row]);
+    }
+
+    public function academicyear()
+    {
+        $this->settingChange();
+        currentPage('academicYear');
+        $x = new Acad();
+
+        $rows = $x->findAll();
+        $rows2 = []; // Initialize an empty array for the modal data
+
+        if (count($_POST) > 0) {
+            if (isset($_POST['submit'])) {
+                $id = $_POST['id'];
+                $rows2 = $x->where(['id' => $id]);
+            } else if (isset($_POST['updateAcad'])) {
+                $id = $_POST['id'];
+                $arr['academic_year'] = $_POST['academic_year'];
+                $arr['semester'] = $_POST['semester'];
+                $arr['status'] = $_POST['status'];
+                if ($_POST['ay_default'] == 1) {
+                    $x->updateDefault($id, 'ay_default', 1);
+                    $x->update($id, $arr);
+                    redirect('adminpage/' . $_SESSION['currentPage']);
+                } else {
+                    $x->update($id, $arr);
+                    redirect('adminpage/' . $_SESSION['currentPage']);
+                }
+            } else {
+                $x->insert($_POST);
+                redirect('adminpage/' . $_SESSION['currentPage']);
+            }
+        }
+
+        $this->view('admin/academic_year', [
+            'rows' => $rows,
+            'rows2' => $rows2, // Pass the modal data to the view
+        ]);
+    }
+
+    public function classlist()
+    {
+        $this->settingChange();
+        currentPage('classList');
+        $x = new Section();
+        if (count($_POST) > 0) {
+            if (isset($_POST['searchClass'])) {
+                $x = new Section();
+                $searchTerm = $_POST['searchBox'];
+                $columns = ['class_course', 'class_level', 'class_section'];
+                $rows = $x->search($searchTerm, $columns);
+                $this->view('admin/class_list', ['rows' => $rows]);
+                exit();
+            } else {
+                $x->insert($_POST);
+                redirect('adminpage/' . $_SESSION['currentPage']);
+            }
+        }
+
+        $rows = $x->findAll();
+        $this->view('admin/class_list', [
+            'rows' => $rows,
+        ]);
+    }
+
+    public function subjectlist()
+    {
+        $this->settingChange();
+        currentPage('subjectList');
+        $x = new Subject();
+
+        $rows = $x->findAll();
+        $rows2 = []; // Initialize an empty array for the modal data
+
+        if (count($_POST) > 0) {
+
+            if(isset($_POST['editSubject'])){
+                $id = $_POST['id'];
+                $rows2 = $x->where(['id' => $id]);
+            }
+             else if (isset($_POST['searchSubject'])) {
+                $x = new Subject();
+                $searchTerm = $_POST['searchBox'];
+                $columns = ['code', 'subject'];
+                $rows = $x->search($searchTerm, $columns);
+                $this->view('admin/subject_list', ['rows' => $rows]);
+                exit();
+            }
+            else if (isset($_POST['updateSubject'])) {
+                $id = $_POST['id'];
+                $arr['code'] = $_POST['code'];
+                $arr['subject'] = $_POST['subject'];
+                $x->update($id, $arr);
+                redirect('adminpage/' . $_SESSION['currentPage']);
+            } else {
+                $x->insert($_POST);
+                redirect('adminpage/' . $_SESSION['currentPage']);
+            }
+        }
+
+        $this->view('admin/subject_list', [
+            'rows' => $rows,
+            'rows2' => $rows2, // Pass the modal data to the view
+        ]);
+    }
+
+    public function criterialist(){
+        $this->settingChange();
+        currentPage('criteriaList');
+        $this->view('admin/criteria_list');
     }
 
     public function studentlist()
     {
 
-        if(isset($_POST['searchStudent'])) {
-            $this->addStudent();
-            $this->settingChange();
-            $_SESSION['currentPage'] =  'studentList';
-    
+        if (isset($_POST['searchStudent'])) {
+
             $x = new Student();
             $y = new Section();
 
+            $searchTerm = $_POST['searchBox'];
+            $searchColumns = ['stud_code', 'stud_fname', 'stud_mname', 'stud_lname', 'stud_email'];
+            $rows = $x->search($searchTerm, $searchColumns);
 
-            $rows = $x->findAll();
             $class = $x->classList();
             $classOption = $y->findAll();
             $this->view('admin/student_list', [
                 'rows' => $rows, 'class' => $class, 'classOption' => $classOption
             ]);
-
+            exit();
         }
 
-        
-        $this->settingChange();
-        $_SESSION['currentPage'] =  'studentList';
 
+        $this->settingChange();
+        currentPage('studentList');
         $x = new Student();
         $y = new Section();
         $rows = $x->findAll();
@@ -60,18 +171,46 @@ class Adminpage extends Controller
         ]);
     }
 
-    public function viewStudent(){
-        if(count($_POST) > 0){
-            $id = $_POST['stud_id'];
-
-            $x = new Student();
-            $rows = $x->where($id);
-
-            foreach($rows as $row){
-                $_SESSION['studname'] = $row->stud_fname;
+    public function editStudent()
+    {
+        $id = ['id' => $_GET['id']];
+        $x = new Student();
+        $y = new Section();
+        $rows = $x->where($id);
+        $class = $x->classList();
+        $classOption = $y->findAll();
+        if (count($_POST) > 0) {
+            if (isset($_POST['delete'])) {
+                $this->deleteUser('student', $_POST['id']);
+                $_SESSION['info'] = showAlert('Deleted Successfully', 'danger');
+                redirect('adminpage/' . $_SESSION['currentPage']);
+            } else if (isset($_POST['resetPass'])) {
+                $arr['stud_pass'] = '@Student01';
+                $x->update($_POST['id'], $arr);
+                $_SESSION['info'] = showAlert('Password has been reset', 'success');
+            } else {
+                $x->update($_POST['id'], $_POST);
+                $_SESSION['info'] = showAlert('Updated Successfully', 'success');
             }
         }
-    }    
+
+        $this->view('admin/edit_student', [
+            'rows' => $rows, 'class' => $class, 'classOption' => $classOption
+        ]);
+    }
+
+    public function deleteUser($type, $id)
+    {
+        $x = '';
+        if ($type == "student") {
+            $x = new Student();
+        } else if ($type == "faculty") {
+            $x = new Faculty();
+        } else {
+            $x = new Admin();
+        }
+        $x->delete($id);
+    }
 
     public function settings()
     {
@@ -119,8 +258,7 @@ class Adminpage extends Controller
             }
             $setting->update('1', $arr);
             settingUpdate();
-            $currentPage = isset($_SESSION['currentPage']) ? $_SESSION['currentPage'] : 'dashboard';
-            redirect('adminpage/' . $currentPage);
+            redirect('adminpage/' . $_SESSION['currentPage']);
         }
     }
 
@@ -140,8 +278,7 @@ class Adminpage extends Controller
                 $_SESSION['errorId'] = showAlert('The Student ID "' . $_POST['stud_code'] . '" is already taken!', 'danger');
             } else {
                 $x->insert($_POST);
-                redirect('adminpage/studentlist');
-                exit();
+                redirect('adminpage/' . $_SESSION['currentPage']);
             }
         }
         $this->view('admin/add_student', [

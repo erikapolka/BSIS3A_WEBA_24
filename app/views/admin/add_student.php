@@ -3,7 +3,7 @@
 <h3><a href="<?= ROOT ?>/adminpage/studentlist"><i class="fa fa-arrow-left text-secondary"></i></a> Add New Student</h3>
 
 
-<div class="row mt-5">
+<div class="row mt-4 shadow p-3 rounded">
   <!-- Form for adding a new student -->
   <form action="" method="post">
 <div class="row">
@@ -45,7 +45,7 @@
         <select id="sectionSelect" class="form-select" required name="stud_class" value="<?= get_var('stud_class') ?>">
           <option value="">Search</option>
           <?php foreach ($classOption as $option) { ?>
-            <option value="<?= $option->id ?>"><?= $option->class_course . "-" . $option->class_level . $option->class_section ?></option>
+            <option value="<?= $option->id ?>" <?php if (get_var('stud_class') == $option->id) echo "selected"; ?>><?= $option->class_course . "-" . $option->class_level . $option->class_section ?></option>
           <?php } ?>
         </select>
       </div>
