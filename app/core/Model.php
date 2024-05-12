@@ -22,7 +22,26 @@ class Model extends Database
             return false;
         }
     }
+    public function findAllOrder($column, $orderDirection = 'ASC')
+    {
+        $orderDirection = strtoupper($orderDirection); // Ensure the order direction is uppercase
+    
+        // Validate the order direction
+        if ($orderDirection !== 'ASC' && $orderDirection !== 'DESC') {
+            throw new Exception("Invalid order direction. Allowed values are 'ASC' or 'DESC'.");
+        }
+    
+        $query = "SELECT * FROM $this->table ORDER BY $column $orderDirection"; // Assuming 'order_by' is the column used for sorting
+        $result = $this->query($query);
+    
+        if ($result) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
 
+  
     public function search($searchTerm, $searchColumns)
     {
         $query = "SELECT * FROM $this->table WHERE ";
@@ -140,6 +159,32 @@ class Model extends Database
 
         return false;
     }
+
+    public function first($data, $data_not = [])
+  {
+    $keys = array_keys($data);
+    $keys_not = array_keys($data_not);
+
+    $query = "select * from  $this->table where ";
+
+    foreach ($keys as $key) {
+      $query .= $key . " = :" . $key . " && ";
+    }
+
+    foreach ($keys_not as $key) {
+      $query .= $key . " != :" . $key . " && ";
+    }
+
+    $query = trim($query, ' && ');
+
+    $data = array_merge($data, $data_not);
+    $result = $this->query($query, $data);
+
+    if ($result) {
+      return $result[0];
+    }
+    return false;
+  }
 
 
     public function classList()

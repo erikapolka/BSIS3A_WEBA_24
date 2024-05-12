@@ -136,7 +136,80 @@ class Adminpage extends Controller
     public function criterialist(){
         $this->settingChange();
         currentPage('criteriaList');
-        $this->view('admin/criteria_list');
+
+
+        $x = new Criteria();
+        if(count($_POST) > 0){
+
+            if(isset($_POST['sortUp'])) {
+                // Get the IDs of the rows you want to swap
+                $id = $_POST['id'];
+                $order_by = $_POST['order_by'];
+            
+                // Get the ID of the next row based on the current order_by value
+                $prevRow = $x->first(['order_by' => ($order_by - 1)]);
+                if ($prevRow) {
+                    $id2 = $prevRow->id;
+                    
+                    // Retrieve the current order_by values of these rows
+                    // Implement this method in your Criteria model to get the order_by value by ID
+                    $order_by2 = $prevRow->order_by; 
+            
+            
+                    // Swap the order_by values of the rows
+                    $update1 = $x->update($id, ['order_by' => $order_by2]); // Update the order_by value of the first row
+                    $update2 = $x->update($id2, ['order_by' => $order_by]); // Update the order_by value of the second row
+            
+                    // Check if both updates were successful
+                    if($update1 && $update2) {
+                        redirect('adminpage/' . $_SESSION['currentPage']);
+                    } else {
+                        // Error handling if the updates failed
+                    }
+                } else {
+                    // Error handling if the next row does not exist
+                }
+            }
+            else if(isset($_POST['sortDown'])) {
+                // Get the IDs of the rows you want to swap
+                $id = $_POST['id'];
+                $order_by = $_POST['order_by'];
+            
+                // Get the ID of the next row based on the current order_by value
+                $nextRow = $x->first(['order_by' => ($order_by + 1)]);
+                if ($nextRow) {
+                    $id2 = $nextRow->id;
+            
+                    // Retrieve the current order_by values of these rows
+                    // Implement this method in your Criteria model to get the order_by value by ID
+                    $order_by2 = $nextRow->order_by;
+            
+                    // Swap the order_by values of the rows
+                    $update1 = $x->update($id, ['order_by' => $order_by2]); // Update the order_by value of the first row
+                    $update2 = $x->update($id2, ['order_by' => $order_by]); // Update the order_by value of the second row
+            
+                    // Check if both updates were successful
+                    if($update1 && $update2) {
+                        redirect('adminpage/' . $_SESSION['currentPage']);
+                    } else {
+                        // Error handling if the updates failed
+                    }
+                } else {
+                    // Error handling if the next row does not exist
+                }
+            }
+            else{
+                $max = $x->findAllOrder('order_by', 'DESC');
+                $_POST['order_by'] = $max[0]->order_by + 1;
+                $x->insert($_POST);
+                redirect('adminpage/' . $_SESSION['currentPage']);
+            }
+            
+            
+        }
+        $max = $x->findAllOrder('order_by', 'DESC');
+        $rows = $x->findAllOrder('order_by', 'ASC');
+        $this->view('admin/criteria_list',['rows' => $rows, 'max' => $max]);
     }
 
     public function studentlist()
