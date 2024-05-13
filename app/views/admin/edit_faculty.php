@@ -6,16 +6,16 @@ foreach ($rows as $item) {
 
 ?>
 
-    <h3><a href="<?= ROOT ?>/adminpage/studentlist"><i class="fa fa-arrow-left text-secondary"></i></a> <?= $item->stud_fname . ' ' . $item->stud_lname ?> - Student</h3>
+    <h3><a href="<?= ROOT ?>/adminpage/facultylist"><i class="fa fa-arrow-left text-secondary"></i></a> <?= $item->faculty_fname . ' ' . $item->faculty_lname ?> - Faculty Member</h3>
 
 
     <div class="row mt-4 shadow p-3 rounded">
-        <!-- Form for adding a new student -->
+        <!-- Form for editing faculty -->
         <form action="" method="post">
             <div class="row">
                 <div class="form-group col-4">
-                    <label for="student_id"><strong>Student ID</strong></label>
-                    <input type="text" value="<?= $item->stud_code ?>" class="form-control mb-3" id="student_id" name="stud_code" placeholder="MA12345678" required autocomplete="off">
+                    <label for="faculty_id"><strong>ID</strong></label>
+                    <input type="text" value="<?= $item->stud_code ?>" class="form-control mb-3" id="faculty_id" name="stud_code" placeholder="MA12345678" required autocomplete="off">
                 </div>
                 <div class="form-group col-8">
                     <?php if (isset($_SESSION["info"])) : ?>
@@ -29,15 +29,15 @@ foreach ($rows as $item) {
             <div class="row d-flex justify-content-start mb-3">
                 <div class="form-group col-lg-4 mb-2 col-sm-12">
                     <label for="first_name"><strong>First Name</strong></label>
-                    <input type="text" value="<?= $item->stud_fname ?>" class="form-control" id="first_name" name="stud_fname" required autocomplete="off">
+                    <input type="text" value="<?= $item->faculty_fname ?>" class="form-control" id="first_name" name="faculty_fname" required autocomplete="off">
                 </div>
                 <div class="form-group col-lg-4 col-sm-12">
                     <label for="middle_name"><strong>Middle Name</strong></label>
-                    <input type="text" value="<?= $item->stud_mname ?>" class="form-control" id="middle_name" name="stud_mname" autocomplete="off">
+                    <input type="text" value="<?= $item->stud_mname ?>" class="form-control" id="middle_name" name="faculty_mname" autocomplete="off">
                 </div>
                 <div class="form-group col-lg-4 col-sm-12">
                     <label for="last_name"><strong>Last Name</strong></label>
-                    <input type="text" value="<?= $item->stud_lname ?>" class="form-control" id="last_name" name="stud_lname" required autocomplete="off">
+                    <input type="text" value="<?= $item->faculty_lname ?>" class="form-control" id="last_name" name="faculty_lname" required autocomplete="off">
                 </div>
             </div>
 
@@ -46,22 +46,9 @@ foreach ($rows as $item) {
             <div class="row mb-3">
 
 
-                <div class="form-group col-lg-4 col-sm-12">
-                    <label for="section"><strong>Course, Yr.&Sec</strong></label>
-                    <select id="dSelect" class="form-select" required name="stud_class">
-                        <option value="">Search</option>
-                        <?php foreach ($classOption as $option) { ?>
-                            <option value="<?= $option->id ?>" <?php if ($item->stud_class == $option->id) echo "selected"; ?>>
-                                <?= $option->class_course . "-" . $option->class_level . $option->class_section ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                </div>
-
-
                 <div class="form-group col-lg-8 col-sm-12">
                     <label for="email"><strong>Email</strong></label>
-                    <input type="email" value="<?= $item->stud_email ?>" class="form-control" id="email" name="stud_email" placeholder="sample@email.com" required autocomplete="off">
+                    <input type="email" value="<?= $item->faculty_email ?>" class="form-control" id="email" name="faculty_email" placeholder="sample@email.com" required autocomplete="off">
                 </div>
             </div>
             <input type="hidden" value="<?= $item->id ?>" name="id">

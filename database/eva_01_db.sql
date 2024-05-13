@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2024 at 04:46 PM
+-- Generation Time: May 13, 2024 at 05:32 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,8 +40,8 @@ CREATE TABLE `acads` (
 --
 
 INSERT INTO `acads` (`id`, `academic_year`, `semester`, `ay_default`, `status`) VALUES
-(1, '2023-2024', 1, 0, 2),
-(2, '2023-2024', 2, 1, 2),
+(1, '2023-2024', 1, 1, 2),
+(2, '2023-2024', 2, 0, 2),
 (3, '2023-2024', 1, 0, 2),
 (4, '2024-2025', 1, 0, 0);
 
@@ -78,9 +78,20 @@ INSERT INTO `admins` (`id`, `admin_code`, `admin_fname`, `admin_mname`, `admin_l
 
 CREATE TABLE `criterias` (
   `id` int(11) NOT NULL,
-  `criteria` varchar(21) NOT NULL,
+  `criteria` varchar(50) NOT NULL,
   `order_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `criterias`
+--
+
+INSERT INTO `criterias` (`id`, `criteria`, `order_by`) VALUES
+(1, 'Objectives', 1),
+(2, 'Materials', 2),
+(3, 'Subject Matter', 3),
+(4, ' Teaching Methods and Strategies', 4),
+(5, 'Classroom Management', 5);
 
 -- --------------------------------------------------------
 
@@ -109,16 +120,52 @@ INSERT INTO `facultys` (`id`, `faculty_code`, `faculty_fname`, `faculty_mname`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `handlings`
+--
+
+CREATE TABLE `handlings` (
+  `id` int(11) NOT NULL,
+  `faculty_id` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL,
+  `section_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `questions`
 --
 
 CREATE TABLE `questions` (
   `id` int(11) NOT NULL,
   `acads_id` int(11) NOT NULL,
-  `question` varchar(100) NOT NULL,
-  `order_by` int(11) NOT NULL,
-  `criterias_id` int(11) NOT NULL
+  `criterias_id` int(11) NOT NULL,
+  `question` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `questions`
+--
+
+INSERT INTO `questions` (`id`, `acads_id`, `criterias_id`, `question`) VALUES
+(7, 1, 1, 'The teacher communicates the objectives clearly at the start of the lesson.'),
+(8, 1, 1, 'The students show understanding of the objectives set by the teacher.'),
+(9, 1, 1, 'The objectives are specific.'),
+(10, 1, 1, 'The objectives are measurable and attainable. '),
+(11, 1, 1, 'The objectives are reasonable and time-bound.'),
+(12, 1, 2, 'The materials necessary in the accomplishment of the objectives are ready for use. '),
+(13, 1, 2, 'The instructional materials  are appropriate for the lesson.'),
+(14, 1, 2, 'The teacher uses relevant and current examples to provide clarity and encourage enthusiasm among the'),
+(15, 1, 3, 'The teacher shows mastery  of the subject matter.'),
+(16, 1, 3, 'The teacher draws upon the experiences and ideas of the students.'),
+(29, 1, 3, 'Explanations and instructions are clear and discussed in detail.'),
+(30, 1, 3, 'The lesson is linked to the previous lesson or learning.\r\n<i>Nauugnay ang bagong aralin sa nakaraang'),
+(31, 1, 4, 'A variety of activities and questioning techniques  are utilized to provide  opportunities to learne'),
+(32, 1, 4, 'The teacher involves all the students, listens to them, and responds appropriately and timely.'),
+(33, 1, 4, 'The teacher integrates other learning devices and gadgets to capture the interest of the learners.'),
+(34, 1, 4, 'The teacher consistently and properly uses the medium of instruction: Filipino or English'),
+(35, 1, 5, 'The students behave well and show high standards of behavior and respect.'),
+(36, 1, 5, 'The students maintain the cleanliness and proper arrangement of the classroom. They follow the \"Clea');
 
 -- --------------------------------------------------------
 
@@ -140,7 +187,8 @@ CREATE TABLE `sections` (
 INSERT INTO `sections` (`id`, `class_course`, `class_level`, `class_section`) VALUES
 (1, 'BSIS', 3, 'A'),
 (2, 'BSOM', 1, 'A'),
-(3, 'BSIS', 1, 'A');
+(3, 'BSIS', 1, 'A'),
+(4, 'BSAIS', 3, 'B');
 
 -- --------------------------------------------------------
 
@@ -242,6 +290,12 @@ ALTER TABLE `facultys`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `handlings`
+--
+ALTER TABLE `handlings`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `questions`
 --
 ALTER TABLE `questions`
@@ -291,7 +345,7 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `criterias`
 --
 ALTER TABLE `criterias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `facultys`
@@ -300,16 +354,22 @@ ALTER TABLE `facultys`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `handlings`
+--
+ALTER TABLE `handlings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `sections`
 --
 ALTER TABLE `sections`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `settings`

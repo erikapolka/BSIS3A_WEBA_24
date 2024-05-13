@@ -22,6 +22,7 @@ class Model extends Database
             return false;
         }
     }
+
     public function findAllOrder($column, $orderDirection = 'ASC')
     {
         $orderDirection = strtoupper($orderDirection); // Ensure the order direction is uppercase
@@ -131,24 +132,6 @@ class Model extends Database
     }
 
 
-    public function update1($id, $data, $column = 'id')
-    {
-        // Get column names from $data array
-        $keys = array_keys($data);
-
-        // Build SET clause for the update query
-        $setClause = implode(' = ?, ', $keys) . ' = ?';
-
-        // Prepare the SQL statement
-        $query = "UPDATE $this->table SET $setClause WHERE $column = ?";
-
-        // Execute the query with data values
-        $result = $this->query($query, array_merge(array_values($data), [$id]));
-
-        // Check if update was successful
-        return $result !== false;
-    }
-
 
     public function delete($id, $column = 'id')
     {
@@ -189,7 +172,6 @@ class Model extends Database
 
     public function classList()
     {
-
         $query = "SELECT id,concat(class_course,' - ',class_level,class_section) as `class` FROM sections";
         //$query = "select * from $this->table";
         $result = $this->query($query);

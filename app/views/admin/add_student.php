@@ -42,7 +42,7 @@
 
       <div class="form-group col-lg-4 col-sm-12">
         <label for="section"><strong>Course, Yr.&Sec</strong></label>
-        <select id="sectionSelect" class="form-select" required name="stud_class" value="<?= get_var('stud_class') ?>">
+        <select id="dSelect" class="form-select" required name="stud_class" value="<?= get_var('stud_class') ?>">
           <option value="">Search</option>
           <?php foreach ($classOption as $option) { ?>
             <option value="<?= $option->id ?>" <?php if (get_var('stud_class') == $option->id) echo "selected"; ?>><?= $option->class_course . "-" . $option->class_level . $option->class_section ?></option>

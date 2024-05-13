@@ -8,7 +8,6 @@
         <div class="col-6 col-sm-6">
             <!-- Search bar -->
 
-
         </div>
         <div class="col-6 col-sm-6 text-right d-flex justify-content-end">
             <!-- Add button -->
@@ -42,7 +41,7 @@
                                 <td class="d-flex justify-content-center py-2">
                                     <form method="post" action="">
                                         <input type="hidden" name="id" value="<?= $item->id ?>">
-                                        <button type="submit" name="editSubject" class="btn btn-success"><i class="fa fa-pen"></i></button>
+                                        <button type="submit" name="editCriteria" class="btn btn-success"><i class="fa fa-pen"></i></button>
                                     </form>
                                 </td>
                                 <td class="py-2 px-2 text-center">
@@ -99,6 +98,46 @@
         </div>
     </div>
 
+    <!-- Edit Subject Modal -->
+    <div class="modal fade" id="editCriteriaModal" tabindex="-1" aria-labelledby="editCriteriaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCriteriaModalLabel">Edit Criteria</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <?php foreach ($rows2 as $row) { ?>
 
+
+                        <form method="post">
+                            
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Criteria:</label>
+                                <input type="text" name="criteria" class="form-control" value="<?= $row->criteria ?>" placeholder="" required>
+                            </div>
+                            <input type="hidden" name="id" value="<?= $row->id ?>">
+
+                        <?php } ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="updateCriteria" class="btn btn-primary d-flex justify-content-end">Save Changes</button>
+                    
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to show the modal -->
+    <?php if (!empty($rows2)) : ?>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var myModal = new bootstrap.Modal(document.getElementById("editCriteriaModal"));
+                myModal.show();
+            });
+        </script>
+    <?php endif; ?>
 
 <?php include 'partials/adminpage_footer.php'; ?>

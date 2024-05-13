@@ -21,6 +21,16 @@ function get_var($key)
     }
 }
 
+function get_selected($key, $value)
+{
+    if (isset($_POST[$key])) {
+        if(isset($_POST[$key]) == $value){
+            return 'selected';
+        }
+    }
+    return '';
+}
+
 function currentPage($page)
 {
     if (!isset($_SESSION['currentPage'])) {

@@ -103,19 +103,17 @@ class Adminpage extends Controller
 
         if (count($_POST) > 0) {
 
-            if(isset($_POST['editSubject'])){
+            if (isset($_POST['editSubject'])) {
                 $id = $_POST['id'];
                 $rows2 = $x->where(['id' => $id]);
-            }
-             else if (isset($_POST['searchSubject'])) {
+            } else if (isset($_POST['searchSubject'])) {
                 $x = new Subject();
                 $searchTerm = $_POST['searchBox'];
                 $columns = ['code', 'subject'];
                 $rows = $x->search($searchTerm, $columns);
                 $this->view('admin/subject_list', ['rows' => $rows]);
                 exit();
-            }
-            else if (isset($_POST['updateSubject'])) {
+            } else if (isset($_POST['updateSubject'])) {
                 $id = $_POST['id'];
                 $arr['code'] = $_POST['code'];
                 $arr['subject'] = $_POST['subject'];
@@ -133,35 +131,105 @@ class Adminpage extends Controller
         ]);
     }
 
-    public function criterialist(){
+
+    public function questions()
+    {
+        $this->settingChange();
+        currentPage('questions');
+        $x = new Acad();
+        $y = new Question();
+        $rows = $x->findAll();
+        $rows2 = []; // Initialize an empty array for the modal data
+        $question = $y->findAll();
+
+        if (count($_POST) > 0) {
+            if (isset($_POST['submit'])) {
+                $id = $_POST['id'];
+                $rows2 = $x->where(['id' => $id]);
+            } else if (isset($_POST['updateAcad'])) {
+                $id = $_POST['id'];
+                $arr['academic_year'] = $_POST['academic_year'];
+                $arr['semester'] = $_POST['semester'];
+                $arr['status'] = $_POST['status'];
+                if ($_POST['ay_default'] == 1) {
+                    $x->updateDefault($id, 'ay_default', 1);
+                    $x->update($id, $arr);
+                    redirect('adminpage/' . $_SESSION['currentPage']);
+                } else {
+                    $x->update($id, $arr);
+                    redirect('adminpage/' . $_SESSION['currentPage']);
+                }
+            } else {
+                $x->insert($_POST);
+                redirect('adminpage/' . $_SESSION['currentPage']);
+            }
+        }
+
+        $this->view('admin/questions', [
+            'rows' => $rows,
+            'rows2' => $rows2, 'questions' => $question
+        ]);
+    }
+
+    public function managequestions()
+    {
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $x = new Question();
+            $y = new Criteria();
+            $z = new Acad();
+            
+            if(count($_POST)>0){
+$_POST['acads_id'] = $id;
+                $x->insert($_POST);
+            }
+
+
+            $rows = $x->where(['acads_id' => $id]);
+            $rows2 = $y->findAllOrder('order_by', 'ASC');
+            $acads = $z->where(['id' => $id]);
+            
+            $this->view('admin/manage_questions', [
+                'rows' => $rows,
+                'rows2' => $rows2, 'acads' => $acads
+            ]);
+        } else {
+            
+        }
+    }
+
+    public function criterialist()
+    {
         $this->settingChange();
         currentPage('criteriaList');
 
 
         $x = new Criteria();
-        if(count($_POST) > 0){
-
-            if(isset($_POST['sortUp'])) {
-                // Get the IDs of the rows you want to swap
-                $id = $_POST['id'];
+        $rows2 = [];
+        if (count($_POST) > 0) {
+            $id = $_POST['id'];
+            if (isset($_POST['editCriteria'])) {
+                $rows2 = $x->where(['id' => $id]);
+            } else if (isset($_POST['sortUp'])) {
                 $order_by = $_POST['order_by'];
-            
+
+
                 // Get the ID of the next row based on the current order_by value
                 $prevRow = $x->first(['order_by' => ($order_by - 1)]);
                 if ($prevRow) {
                     $id2 = $prevRow->id;
-                    
+
                     // Retrieve the current order_by values of these rows
                     // Implement this method in your Criteria model to get the order_by value by ID
-                    $order_by2 = $prevRow->order_by; 
-            
-            
+                    $order_by2 = $prevRow->order_by;
+
+
                     // Swap the order_by values of the rows
                     $update1 = $x->update($id, ['order_by' => $order_by2]); // Update the order_by value of the first row
                     $update2 = $x->update($id2, ['order_by' => $order_by]); // Update the order_by value of the second row
-            
+
                     // Check if both updates were successful
-                    if($update1 && $update2) {
+                    if ($update1 && $update2) {
                         redirect('adminpage/' . $_SESSION['currentPage']);
                     } else {
                         // Error handling if the updates failed
@@ -169,27 +237,24 @@ class Adminpage extends Controller
                 } else {
                     // Error handling if the next row does not exist
                 }
-            }
-            else if(isset($_POST['sortDown'])) {
-                // Get the IDs of the rows you want to swap
-                $id = $_POST['id'];
+            } else if (isset($_POST['sortDown'])) {
                 $order_by = $_POST['order_by'];
-            
+
                 // Get the ID of the next row based on the current order_by value
                 $nextRow = $x->first(['order_by' => ($order_by + 1)]);
                 if ($nextRow) {
                     $id2 = $nextRow->id;
-            
+
                     // Retrieve the current order_by values of these rows
                     // Implement this method in your Criteria model to get the order_by value by ID
                     $order_by2 = $nextRow->order_by;
-            
+
                     // Swap the order_by values of the rows
                     $update1 = $x->update($id, ['order_by' => $order_by2]); // Update the order_by value of the first row
                     $update2 = $x->update($id2, ['order_by' => $order_by]); // Update the order_by value of the second row
-            
+
                     // Check if both updates were successful
-                    if($update1 && $update2) {
+                    if ($update1 && $update2) {
                         redirect('adminpage/' . $_SESSION['currentPage']);
                     } else {
                         // Error handling if the updates failed
@@ -197,19 +262,21 @@ class Adminpage extends Controller
                 } else {
                     // Error handling if the next row does not exist
                 }
-            }
-            else{
+            } else if (isset($_POST['updateCriteria'])) {
+
+                $arr['criteria'] = $_POST['criteria'];
+                $x->update($id, $arr);
+                redirect('adminpage/' . $_SESSION['currentPage']);
+            } else {
                 $max = $x->findAllOrder('order_by', 'DESC');
                 $_POST['order_by'] = $max[0]->order_by + 1;
                 $x->insert($_POST);
                 redirect('adminpage/' . $_SESSION['currentPage']);
             }
-            
-            
         }
         $max = $x->findAllOrder('order_by', 'DESC');
         $rows = $x->findAllOrder('order_by', 'ASC');
-        $this->view('admin/criteria_list',['rows' => $rows, 'max' => $max]);
+        $this->view('admin/criteria_list', ['rows' => $rows, 'rows2' => $rows2, 'max' => $max]);
     }
 
     public function studentlist()
@@ -241,6 +308,38 @@ class Adminpage extends Controller
         $class = $x->classList();
         $this->view('admin/student_list', [
             'rows' => $rows, 'class' => $class
+        ]);
+    }
+
+    public function facultylist()
+    {
+
+        if (isset($_POST['searchFaculty'])) {
+
+            $x = new Faculty();
+            
+
+            $searchTerm = $_POST['searchBox'];
+            $searchColumns = ['faculty_code', 'faculty_fname', 'faculty_mname', 'faculty_lname', 'faculty_email'];
+            $rows = $x->search($searchTerm, $searchColumns);
+
+            
+            
+            $this->view('admin/faculty_list', [
+                'rows' => $rows
+            ]);
+            exit();
+        }
+
+
+        $this->settingChange();
+        currentPage('facultyList');
+        $x = new Faculty();
+        
+        $rows = $x->findAll();
+        
+        $this->view('admin/faculty_list', [
+            'rows' => $rows
         ]);
     }
 

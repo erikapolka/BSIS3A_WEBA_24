@@ -1,6 +1,6 @@
 <?php include 'partials/adminpage_header.php'; ?>
 
-<h3>Student List</h3>
+<h3>Faculty List</h3>
 <div class="form-group">
   <?php if (isset($_SESSION["info"])) : ?>
     <?php echo ($_SESSION["info"]) ?>
@@ -23,7 +23,7 @@
     </div>
     <div class="col-6 col-sm-6 text-right d-flex justify-content-end">
       <!-- Add button -->
-      <a href="<?= ROOT ?>/adminpage/addstudent" class="btn btn-primary mb-2">Add</a>
+      <a href="<?= ROOT ?>/adminpage/addfaculty" class="btn btn-primary mb-2">Add</a>
       <!-- <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#addStudentModal">Add</button> -->
     </div>
   </div>
@@ -33,9 +33,9 @@
       <table class="table table-bordered table-hover table-striped table-sm">
         <thead class="table-dark">
           <tr class="text-center">
-            <th>Student ID</th>
+            <th>ID</th>
             <th>Name</th>
-            <th>Course, Year & Section</th>
+            <th>Handled Class/es</th>
             <th>Email</th>
             <th>Action</th>
           </tr>
@@ -47,10 +47,10 @@
 
             foreach ($rows as $item) { ?>
               <tr>
-                <td class="py-2 px-2"><?= $item->stud_code ?></td>
-                <td class="px-5 py-2"><?= $item->stud_lname . ", "  . $item->stud_fname . " "  . $item->stud_mname ?></td>
-                <td class="text-center py-2"><?= isset($class[$item->stud_class]) ? $class[$item->stud_class] : 'N/A' ?></td>
-                <td class="text-start py-2"><?= $item->stud_email ?></td>
+                <td class="py-2 px-2"><?= $item->faculty_code ?></td>
+                <td class="px-5 py-2"><?= $item->faculty_lname . ", "  . $item->faculty_fname . " "  . $item->faculty_mname ?></td>
+                <td class="text-center py-2"><?= 'N/A' ?></td>
+                <td class="text-start py-2"><?= $item->faculty_email ?></td>
                 <td class="d-flex justify-content-center py-2"><a href='<?= ROOT ?>/adminpage/editstudent?id=<?= $item->id ?>' class="btn btn-success">
                     <i class="fa fa-pen"></i>
                   </a></td>
