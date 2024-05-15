@@ -56,3 +56,42 @@
 .sidebar .treeview.active .treeview-menu {
     display: block;
 }
+
+
+
+
+
+<div class="col-md-12 table-responsive">
+<?php foreach ($subjects as $subject) { ?>
+    <table class="table table-bordered table-hover table-striped table-sm">
+        <thead class="table table-dark">
+            <tr>
+                <th class="w-50 p-2"><?= $subject->code; ?></th>
+                <?php for ($i = 1; $i <= 5; $i++) : ?>
+                    <th><?= $i; ?></th>
+                <?php endfor; ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($handles) && $handles != null) { ?>
+                <?php foreach ($handles as $handle) { ?>
+                    <?php if ($subject->id == $handle->subject_id) { ?>
+                        <tr>
+                            <td class="p-3"><?= $handle->section_id; ?></td> <!-- Access question property directly -->
+                            <?php for ($i = 1; $i <= 5; $i++) : ?>
+                                <td><input disabled type="radio" class="form-check-input" name="question_<?= $handle->id; ?>_<?= $handle->id; ?>" value="<?= $i; ?>"></td>
+                            <?php endfor; ?>
+                        </tr>
+                    <?php } ?>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="6">
+                        <p class="mt-3 text-center">No questions found for this criterion</p>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } ?>
+</div>

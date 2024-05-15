@@ -49,6 +49,7 @@
       <label for="password"><strong>Password</strong> <i class="">(default)</i></label>
       <input type="text" class="form-control" name="faculty_pass" disabled placeholder="@Faculty01">
     </div>
+    <input type="hidden" name="usertype" value="faculty">
     <div class="d-flex justify-content-center"><button type="submit" class="btn btn-primary w-25 ">Save</button></div>
     
   </form>

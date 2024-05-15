@@ -40,7 +40,7 @@
                                 <td class="py-2 px-2"><?= $item->semester ?></td>
                                 <td class="px-5 py-2">
                                     <?php
-                                    if ($questions != null) {
+                                    if (!empty($questions)) {
                                     $questionCount = 0;
                                     foreach ($questions as $question) {
                                         if ($question->acads_id == $item->id) {

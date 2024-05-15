@@ -7,7 +7,7 @@
 <div class="mt-4 shadow p-3 rounded">
     <div class="col-12 mb-3">
         <div class="card">
-            <div class="card-body bg-primary-subtle">
+            <div class="card-body bg-secondary-subtle">
                 <br>
                 <div class="col-md-6">
                     <?php foreach ($rows as $item) { ?>

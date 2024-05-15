@@ -135,6 +135,7 @@
     size: '', // Can be "sm" or "lg". Default ''
 }
 dselect(document.querySelector('#dSelect'), config)
+dselect(document.querySelector('#dSelectSection'), config)
 
 
     });

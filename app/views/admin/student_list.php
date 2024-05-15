@@ -4,10 +4,11 @@
 <div class="form-group">
   <?php if (isset($_SESSION["info"])) : ?>
     <?php echo ($_SESSION["info"]) ?>
-    <?php unset($_SESSION["info"]);
-    ?>
+    <?php unset($_SESSION["info"]);?>
   <?php endif; ?>
 </div>
+
+
 <div class="container mt-4 shadow p-3 rounded">
   <div class="row">
     <div class="col-6 col-sm-6">

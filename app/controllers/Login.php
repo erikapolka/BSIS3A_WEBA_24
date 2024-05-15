@@ -4,19 +4,15 @@ class Login extends Controller
 {
     public function index()
     {
-        
 
         if (isset($_POST['login_submit'])) {
             $user = $_POST['login_id'];
             $pass = $_POST['login_pass'];
 
-            // Validate form data
-            if (empty($user) || empty($pass)) {
-                // Set error message
 
+            if (empty($user) || empty($pass)) {
                 $_SESSION["errors"] = showAlert('Username and Password cannot be empty.', 'danger');
             } else {
-                // No errors, proceed with authentication
                 $student = new Student();
                 $studentResult = $student->authenticate($user, $pass);
 
@@ -62,12 +58,7 @@ class Login extends Controller
 
     public function logout()
     {
-        session_start();
-        $_SESSION = array();
-        session_destroy();
+        Auth::logout();
         redirect("login");
-        exit();
     }
-
-
 }

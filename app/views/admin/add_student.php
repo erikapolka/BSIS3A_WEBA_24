@@ -60,6 +60,7 @@
       <label for="password"><strong>Password</strong> <i class="">(default)</i></label>
       <input type="text" class="form-control" name="stud_pass" disabled placeholder="@Student01">
     </div>
+    <input type="hidden" name="usertype" value="student">
     <div class="d-flex justify-content-center"><button type="submit" class="btn btn-primary w-25 ">Save</button></div>
     
   </form>

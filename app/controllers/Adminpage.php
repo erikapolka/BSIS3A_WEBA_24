@@ -299,12 +299,11 @@ $_POST['acads_id'] = $id;
             exit();
         }
 
-
         $this->settingChange();
         currentPage('studentList');
         $x = new Student();
         $y = new Section();
-        $rows = $x->findAll();
+        $rows = $x->findAllOrder('stud_lname', 'ASC');
         $class = $x->classList();
         $this->view('admin/student_list', [
             'rows' => $rows, 'class' => $class
@@ -322,9 +321,6 @@ $_POST['acads_id'] = $id;
             $searchTerm = $_POST['searchBox'];
             $searchColumns = ['faculty_code', 'faculty_fname', 'faculty_mname', 'faculty_lname', 'faculty_email'];
             $rows = $x->search($searchTerm, $searchColumns);
-
-            
-            
             $this->view('admin/faculty_list', [
                 'rows' => $rows
             ]);
@@ -335,11 +331,15 @@ $_POST['acads_id'] = $id;
         $this->settingChange();
         currentPage('facultyList');
         $x = new Faculty();
+        $y = new Handling();
         
-        $rows = $x->findAll();
+        
+        $rows = $x->findAllOrder('faculty_lname', 'ASC');
+        $handles = $y->findAll();
+        
         
         $this->view('admin/faculty_list', [
-            'rows' => $rows
+            'rows' => $rows, 'handles' => $handles
         ]);
     }
 
@@ -375,7 +375,10 @@ $_POST['acads_id'] = $id;
     {
         $id = ['id' => $_GET['id']];
         $x = new Faculty();
-        $rows = $x->where($id);
+        $y = new Subject();
+        $z = new Section();
+        $handlings = new Handling();
+        
         if (count($_POST) > 0) {
             if (isset($_POST['delete'])) {
                 $this->deleteUser('faculty', $_POST['id']);
@@ -385,14 +388,37 @@ $_POST['acads_id'] = $id;
                 $arr['faculty_pass'] = '@Faculty01';
                 $x->update($_POST['id'], $arr);
                 $_SESSION['info'] = showAlert('Password has been reset', 'success');
+            }
+            else if (isset($_POST['section_id']) && !empty($_POST['section_id'])) {
+                // Retrieve the selected sections
+                $selectedSections = $_POST['section_id'];
+                
+                // Prepare other necessary data
+                $faculty_id = $_GET['id'];
+                $subject_id = $_POST['subject_id'];
+                
+                // Assume $handlings is an instance of your database handling class
+                foreach ($selectedSections as $section_id) {
+                    $arr = [
+                        'faculty_id' => $faculty_id,
+                        'subject_id' => $subject_id,
+                        'section_id' => $section_id
+                    ];
+                    // Insert the data into the database
+                    $handlings->insert($arr);
+                }
             } else {
                 $x->update($_POST['id'], $_POST);
                 $_SESSION['info'] = showAlert('Updated Successfully', 'success');
             }
         }
-
+        $rows = $x->where($id);
+        $subjects = $y->findAllOrder('code', 'ASC');
+        $sections = $z->findAllOrder('class_course', 'ASC');
+        $class = $x->classList();
+        $showHandlings = $handlings->where(['faculty_id' => $_GET['id']]);
         $this->view('admin/edit_faculty', [
-            'rows' => $rows
+            'rows' => $rows, 'subjects' => $subjects, 'class' => $class, 'sections' => $sections, 'handles' => $showHandlings
         ]);
     }
 

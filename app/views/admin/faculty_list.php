@@ -7,6 +7,29 @@
     <?php unset($_SESSION["info"]);
     ?>
   <?php endif; ?>
+  <?php
+// Initialize an associative array to store the subject counts for each faculty member
+$facultySubjectCounts = [];
+
+// Loop through each handling entry
+foreach ($handles as $handle) {
+    // Get the faculty ID from the handling entry
+    $facultyId = $handle->faculty_id;
+
+    // Check if the faculty ID already exists in the subject counts array
+    if (!isset($facultySubjectCounts[$facultyId])) {
+        // If not, initialize the count for this faculty member
+        $facultySubjectCounts[$facultyId] = [];
+    }
+
+    // Add the subject ID to the array for this faculty member if it doesn't already exist
+    if (!in_array($handle->subject_id, $facultySubjectCounts[$facultyId])) {
+        $facultySubjectCounts[$facultyId][] = $handle->subject_id;
+    }
+}
+
+// Now $facultySubjectCounts contains the count of subjects handled by each faculty member
+?>
 </div>
 <div class="container mt-4 shadow p-3 rounded">
   <div class="row">
@@ -35,7 +58,7 @@
           <tr class="text-center">
             <th>ID</th>
             <th>Name</th>
-            <th>Handled Class/es</th>
+            <th>Handled Subject/s</th>
             <th>Email</th>
             <th>Action</th>
           </tr>
@@ -49,7 +72,7 @@
               <tr>
                 <td class="py-2 px-2"><?= $item->faculty_code ?></td>
                 <td class="px-5 py-2"><?= $item->faculty_lname . ", "  . $item->faculty_fname . " "  . $item->faculty_mname ?></td>
-                <td class="text-center py-2"><?= 'N/A' ?></td>
+                <td class="px-5 py-2 text-center"><?= isset($facultySubjectCounts[$item->id]) ? count($facultySubjectCounts[$item->id]) : 0 ?></td>
                 <td class="text-start py-2"><?= $item->faculty_email ?></td>
                 <td class="d-flex justify-content-center py-2"><a href='<?= ROOT ?>/adminpage/editfaculty?id=<?= $item->id ?>' class="btn btn-success">
                     <i class="fa fa-pen"></i>
@@ -67,7 +90,6 @@
       </table>
     </div>
   </div>
-
 
 
 
