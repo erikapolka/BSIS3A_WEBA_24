@@ -51,7 +51,7 @@
                 <td class="px-5 py-2"><?= $item->faculty_lname . ", "  . $item->faculty_fname . " "  . $item->faculty_mname ?></td>
                 <td class="text-center py-2"><?= 'N/A' ?></td>
                 <td class="text-start py-2"><?= $item->faculty_email ?></td>
-                <td class="d-flex justify-content-center py-2"><a href='<?= ROOT ?>/adminpage/editstudent?id=<?= $item->id ?>' class="btn btn-success">
+                <td class="d-flex justify-content-center py-2"><a href='<?= ROOT ?>/adminpage/editfaculty?id=<?= $item->id ?>' class="btn btn-success">
                     <i class="fa fa-pen"></i>
                   </a></td>
               </tr>

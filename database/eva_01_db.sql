@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 13, 2024 at 05:32 PM
+-- Generation Time: May 15, 2024 at 02:38 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -115,7 +115,7 @@ CREATE TABLE `facultys` (
 --
 
 INSERT INTO `facultys` (`id`, `faculty_code`, `faculty_fname`, `faculty_mname`, `faculty_lname`, `faculty_email`, `faculty_pass`, `faculty_date_added`) VALUES
-(1, 'fa123', 'Manny', 'D', 'Pacquiao', 'manny@g.com', '123', '0000-00-00');
+(1, 'fa123', 'Manny', 'D', 'Pacquiao', 'manny@g.com', '@Faculty01', '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -351,7 +351,7 @@ ALTER TABLE `criterias`
 -- AUTO_INCREMENT for table `facultys`
 --
 ALTER TABLE `facultys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `handlings`

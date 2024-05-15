@@ -15,7 +15,7 @@ foreach ($rows as $item) {
             <div class="row">
                 <div class="form-group col-4">
                     <label for="faculty_id"><strong>ID</strong></label>
-                    <input type="text" value="<?= $item->stud_code ?>" class="form-control mb-3" id="faculty_id" name="stud_code" placeholder="MA12345678" required autocomplete="off">
+                    <input type="text" value="<?= $item->faculty_code ?>" class="form-control mb-3" id="faculty_id" name="faculty_code" placeholder="MA12345678" required autocomplete="off">
                 </div>
                 <div class="form-group col-8">
                     <?php if (isset($_SESSION["info"])) : ?>
@@ -33,7 +33,7 @@ foreach ($rows as $item) {
                 </div>
                 <div class="form-group col-lg-4 col-sm-12">
                     <label for="middle_name"><strong>Middle Name</strong></label>
-                    <input type="text" value="<?= $item->stud_mname ?>" class="form-control" id="middle_name" name="faculty_mname" autocomplete="off">
+                    <input type="text" value="<?= $item->faculty_mname ?>" class="form-control" id="middle_name" name="faculty_mname" autocomplete="off">
                 </div>
                 <div class="form-group col-lg-4 col-sm-12">
                     <label for="last_name"><strong>Last Name</strong></label>

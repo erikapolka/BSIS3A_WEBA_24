@@ -371,6 +371,33 @@ $_POST['acads_id'] = $id;
         ]);
     }
 
+    public function editfaculty()
+    {
+        $id = ['id' => $_GET['id']];
+        $x = new Faculty();
+        $rows = $x->where($id);
+        if (count($_POST) > 0) {
+            if (isset($_POST['delete'])) {
+                $this->deleteUser('faculty', $_POST['id']);
+                $_SESSION['info'] = showAlert('Deleted Successfully', 'danger');
+                redirect('adminpage/' . $_SESSION['currentPage']);
+            } else if (isset($_POST['resetPass'])) {
+                $arr['faculty_pass'] = '@Faculty01';
+                $x->update($_POST['id'], $arr);
+                $_SESSION['info'] = showAlert('Password has been reset', 'success');
+            } else {
+                $x->update($_POST['id'], $_POST);
+                $_SESSION['info'] = showAlert('Updated Successfully', 'success');
+            }
+        }
+
+        $this->view('admin/edit_faculty', [
+            'rows' => $rows
+        ]);
+    }
+
+    
+
     public function deleteUser($type, $id)
     {
         $x = '';
@@ -455,6 +482,26 @@ $_POST['acads_id'] = $id;
         }
         $this->view('admin/add_student', [
             'rows' => $rows, 'class' => $class, 'classOption' => $classOption
+        ]);
+    }
+
+    public function addfaculty()
+    {
+        $x = new Faculty();
+        $rows = $x->findAll();
+
+        if (count($_POST) > 0) {
+            $_POST['faculty_pass'] = '@Faculty01';
+            $checkId = $x->where(['faculty_code' => $_POST['faculty_code']]);
+            if ($checkId) {
+                $_SESSION['errorId'] = showAlert('The ID "' . $_POST['faculty_code'] . '" is already taken!', 'danger');
+            } else {
+                $x->insert($_POST);
+                redirect('adminpage/' . $_SESSION['currentPage']);
+            }
+        }
+        $this->view('admin/add_faculty', [
+            'rows' => $rows
         ]);
     }
 }
