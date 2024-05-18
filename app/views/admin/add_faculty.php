@@ -9,7 +9,7 @@
 <div class="row">
     <div class="form-group col-4">
       <label for="faculty_id"><strong>ID</strong></label>
-      <input type="text" class="form-control mb-3" id="faculty_id" name="faculty_code" placeholder="24-00000" required autocomplete="off">
+      <input type="text" class="form-control mb-3" id="faculty_id" name="code" placeholder="24-00000" required autocomplete="off">
     </div>
     <div class="form-group col-8">
       <?php if (isset($_SESSION["errorId"])) : ?>

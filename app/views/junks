@@ -95,3 +95,11 @@
     </table>
 <?php } ?>
 </div>
+
+
+
+<p>Academic ID: <?= htmlspecialchars($acads_default->id); ?></p>
+<p>Class ID: <?= htmlspecialchars($student->stud_class); ?></p>
+<p>Student ID: <?= htmlspecialchars($student->id); ?></p>
+<p>Subject ID: <?= htmlspecialchars($handles->subject_id); ?></p>
+<p>Faculty ID: <?= htmlspecialchars($facultys->id); ?></p>

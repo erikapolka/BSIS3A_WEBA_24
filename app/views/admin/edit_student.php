@@ -15,7 +15,7 @@ foreach ($rows as $item) {
             <div class="row">
                 <div class="form-group col-4">
                     <label for="student_id"><strong>Student ID</strong></label>
-                    <input type="text" value="<?= $item->stud_code ?>" class="form-control mb-3" id="student_id" name="stud_code" placeholder="MA12345678" required autocomplete="off">
+                    <input type="text" value="<?= $item->code ?>" class="form-control mb-3" id="student_id" name="code" placeholder="MA12345678" required autocomplete="off">
                 </div>
                 <div class="form-group col-8">
                     <?php if (isset($_SESSION["info"])) : ?>

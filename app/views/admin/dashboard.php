@@ -75,7 +75,7 @@
                     </h5>
                     <div class=" d-flex justify-content-between align-content-center pt-3">
                         <div class="card-text mx-4">
-                            <h1><strong>0</strong></h1>
+                            <h1><strong><?= $_SESSION['totalSection'] ?></strong></h1>
                         </div>
                         <i class="fa fa-book fs-1 text-black-50 mx-2"></i>
                     </div>

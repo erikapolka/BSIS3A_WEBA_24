@@ -11,12 +11,12 @@ class Student extends Model
         // Replace this with your actual authentication logic
         
         // Example: Check if the provided username and password match any record in the 'students' table
-        $result = $this->where(['stud_code' => $username, 'stud_pass' => $password]);
+        $result = $this->where(['code' => $username, 'stud_pass' => $password]);
         
         return $result && count($result) > 0; // Return true if any rows are found, indicating successful authentication
     }
     public function getName($user){
-        $result = $this->where(['stud_code' => $user]);
+        $result = $this->where(['code' => $user]);
         if ($result && count($result) > 0) {
             // Assuming the result is an array of objects with 'stud_fname' and 'stud_lname' properties
             $getName = $result[0];

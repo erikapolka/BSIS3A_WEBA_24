@@ -1,12 +1,7 @@
 <?php
 
-session_start();
-// Check if the user is not logged in (no active session)
-if (!isset($_SESSION['userId']) || $_SESSION['currentUser'] !== 'student') {
-    // Redirect the user to the login page
-    redirect("404");
-    exit(); // Stop further execution of the script
-}
+
+
 $theme = $_SESSION['theme'];
 // If the user is logged in, continue to the restricted page
 ?>
@@ -21,7 +16,7 @@ $theme = $_SESSION['theme'];
     <title><?= $_SESSION['systemname']?></title>
     <!-- Bootstrap CSS -->
     <base href="<?= BASEURL ?>">
-    <link rel="icon" type="image/x-icon" href="public/resources/<?= $_SESSION['logo']?>">
+    <link rel="icon" type="image/x-icon" href="public/assets/images/<?= $_SESSION['logo']?>">
     <link rel="stylesheet" href="css/main_theme.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
@@ -29,15 +24,8 @@ $theme = $_SESSION['theme'];
     <style>
         /* Content */
         .content {
-            transition: margin-left 0.3s;
-            padding: 1rem;
-            margin-left: 5rem;
-            /* Adjust margin to accommodate sidebar width */
             padding-top: 6.25rem;
-            padding-left: 1rem;
             z-index: 999;
-            /* Ensure content appears below navbar and sidebar */
-            /* Width of the sidebar */
         }
 
 
@@ -145,7 +133,7 @@ $theme = $_SESSION['theme'];
             <!-- Brand with logo, name, and tagline -->
             <a class="navbar-brand" href="#">
                 
-                <img src="public/resources/<?= $_SESSION['logo'] ?>" alt="Logo" class="brand-logo img-fluid custom-shadow rounded-5">
+                <img src="public/assets/images/<?= $_SESSION['logo'] ?>" alt="Logo" class="brand-logo img-fluid custom-shadow rounded-5">
                 <div class="brand-info">
                     <div class="brand-name"><?= $_SESSION['systemname']?></div>
                     <div class="tagline"><?= $_SESSION['schoolname'] ?></div>

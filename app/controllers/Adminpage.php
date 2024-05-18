@@ -3,12 +3,21 @@ session_start();
 
 class Adminpage extends Controller
 {
+    private function auto_auth()
+    {
+        if (!Auth::logged_in('admin')) {
+            redirect('404');
+        }
+    }
+
     public function index()
     {
+        $this->auto_auth();
 
+        
         // Define the user types
-        $userTypes = ['Admin', 'Student', 'Faculty'];
-
+        $userTypes = ['Admin', 'Student', 'Faculty', 'Section'];
+        $adminList = [];
         // Loop through each user type
         foreach ($userTypes as $userType) {
             // Create an instance of the corresponding class
@@ -18,19 +27,66 @@ class Adminpage extends Controller
             $totalUsers = $user->findAll();
 
             // Count the total users and store the count in a session variable
-            $_SESSION['total' . $userType] = count($totalUsers);
+            if ($totalUsers != null) {
+                $_SESSION['total' . $userType] = count($totalUsers);
+            } else {
+                $_SESSION['total' . $userType] = 0;
+            }
         }
+
         $year = new Acad();
 
         $row = $year->where(['ay_default' => '1']);
+
+        $this->users();
+        $this->changepass();
+
         $this->settingChange();
         currentPage('dashboard');
 
         $this->view('admin/dashboard', ['rows' => $row]);
     }
 
+    public function changepass()
+    {
+        //NOT WORKING
+        $x = new Admin();
+        if (count($_POST) > 0) {
+            $seeAdmin = $x->first(['code' => $_SESSION['USER_ID']]);
+
+            if ($_POST['admin_pass'] == $seeAdmin->admin_pass && $_POST['pass1'] == $_POST['pass2']) {
+                $arr['admin_pass'] = $_POST['pass1'];
+                $x->update($seeAdmin->id, $arr);
+                redirect('adminpage');
+                exit();
+            } else {
+                $_SESSION['welcome'] = showAlert('Welcome, ' . $_SESSION["fullName"] . "!", 'success');
+                redirect('adminpage');
+            }
+        }
+    }
+    public function users()
+    {
+        $x = new Admin();
+        $year = new Acad();
+
+        $row = $year->where(['ay_default' => '1']);
+        if (count($_POST) > 0) {
+            $seeAdmin = $x->first(['code' => $_SESSION['USER_ID']]);
+
+            if ($_POST['admin_pass'] == $seeAdmin->admin_pass) {
+                $adminList = $x->findAll();
+                $this->view('admin/dashboard', ['rows' => $row, 'adminList' => $adminList]);
+                exit();
+            } else {
+                $_SESSION['welcome'] = showAlert('Welcome, ' . $_SESSION["fullName"] . "!", 'success');
+                redirect('adminpage');
+            }
+        }
+    }
     public function academicyear()
     {
+        $this->auto_auth();
         $this->settingChange();
         currentPage('academicYear');
         $x = new Acad();
@@ -69,6 +125,7 @@ class Adminpage extends Controller
 
     public function classlist()
     {
+        $this->auto_auth();
         $this->settingChange();
         currentPage('classList');
         $x = new Section();
@@ -94,6 +151,7 @@ class Adminpage extends Controller
 
     public function subjectlist()
     {
+        $this->auto_auth();
         $this->settingChange();
         currentPage('subjectList');
         $x = new Subject();
@@ -134,6 +192,7 @@ class Adminpage extends Controller
 
     public function questions()
     {
+        $this->auto_auth();
         $this->settingChange();
         currentPage('questions');
         $x = new Acad();
@@ -173,14 +232,15 @@ class Adminpage extends Controller
 
     public function managequestions()
     {
+        $this->auto_auth();
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $x = new Question();
             $y = new Criteria();
             $z = new Acad();
-            
-            if(count($_POST)>0){
-$_POST['acads_id'] = $id;
+
+            if (count($_POST) > 0) {
+                $_POST['acads_id'] = $id;
                 $x->insert($_POST);
             }
 
@@ -188,18 +248,18 @@ $_POST['acads_id'] = $id;
             $rows = $x->where(['acads_id' => $id]);
             $rows2 = $y->findAllOrder('order_by', 'ASC');
             $acads = $z->where(['id' => $id]);
-            
+
             $this->view('admin/manage_questions', [
                 'rows' => $rows,
                 'rows2' => $rows2, 'acads' => $acads
             ]);
         } else {
-            
         }
     }
 
     public function criterialist()
     {
+        $this->auto_auth();
         $this->settingChange();
         currentPage('criteriaList');
 
@@ -281,14 +341,14 @@ $_POST['acads_id'] = $id;
 
     public function studentlist()
     {
-
+        $this->auto_auth();
         if (isset($_POST['searchStudent'])) {
 
             $x = new Student();
             $y = new Section();
 
             $searchTerm = $_POST['searchBox'];
-            $searchColumns = ['stud_code', 'stud_fname', 'stud_mname', 'stud_lname', 'stud_email'];
+            $searchColumns = ['code', 'stud_fname', 'stud_mname', 'stud_lname', 'stud_email'];
             $rows = $x->search($searchTerm, $searchColumns);
 
             $class = $x->classList();
@@ -312,32 +372,27 @@ $_POST['acads_id'] = $id;
 
     public function facultylist()
     {
-
-        if (isset($_POST['searchFaculty'])) {
-
-            $x = new Faculty();
-            
-
-            $searchTerm = $_POST['searchBox'];
-            $searchColumns = ['faculty_code', 'faculty_fname', 'faculty_mname', 'faculty_lname', 'faculty_email'];
-            $rows = $x->search($searchTerm, $searchColumns);
-            $this->view('admin/faculty_list', [
-                'rows' => $rows
-            ]);
-            exit();
-        }
-
-
+        $this->auto_auth();
         $this->settingChange();
         currentPage('facultyList');
         $x = new Faculty();
         $y = new Handling();
-        
-        
-        $rows = $x->findAllOrder('faculty_lname', 'ASC');
         $handles = $y->findAll();
-        
-        
+
+        if (isset($_POST['searchFaculty'])) {
+
+
+            $searchTerm = $_POST['searchBox'];
+            $searchColumns = ['code', 'faculty_fname', 'faculty_mname', 'faculty_lname', 'faculty_email'];
+            $rows = $x->search($searchTerm, $searchColumns);
+            $this->view('admin/faculty_list', [
+                'rows' => $rows, 'handles' => $handles
+            ]);
+            exit();
+        }
+
+        $rows = $x->findAllOrder('faculty_lname', 'ASC');
+
         $this->view('admin/faculty_list', [
             'rows' => $rows, 'handles' => $handles
         ]);
@@ -345,7 +400,8 @@ $_POST['acads_id'] = $id;
 
     public function editStudent()
     {
-        $id = ['id' => $_GET['id']];
+        $this->auto_auth();
+        $id = ['token' => $_GET['id']];
         $x = new Student();
         $y = new Section();
         $rows = $x->where($id);
@@ -357,7 +413,7 @@ $_POST['acads_id'] = $id;
                 $_SESSION['info'] = showAlert('Deleted Successfully', 'danger');
                 redirect('adminpage/' . $_SESSION['currentPage']);
             } else if (isset($_POST['resetPass'])) {
-                $arr['stud_pass'] = '@Student01';
+                $arr['stud_pass'] = password_hash('@Student01', PASSWORD_DEFAULT);
                 $x->update($_POST['id'], $arr);
                 $_SESSION['info'] = showAlert('Password has been reset', 'success');
             } else {
@@ -373,30 +429,29 @@ $_POST['acads_id'] = $id;
 
     public function editfaculty()
     {
-        $id = ['id' => $_GET['id']];
+        $this->auto_auth();
+        $id = ['token' => $_GET['id']];
         $x = new Faculty();
         $y = new Subject();
         $z = new Section();
         $handlings = new Handling();
-        
+
         if (count($_POST) > 0) {
             if (isset($_POST['delete'])) {
                 $this->deleteUser('faculty', $_POST['id']);
                 $_SESSION['info'] = showAlert('Deleted Successfully', 'danger');
                 redirect('adminpage/' . $_SESSION['currentPage']);
             } else if (isset($_POST['resetPass'])) {
-                $arr['faculty_pass'] = '@Faculty01';
+                $arr['faculty_pass'] = password_hash('@Faculty01', PASSWORD_DEFAULT);
                 $x->update($_POST['id'], $arr);
                 $_SESSION['info'] = showAlert('Password has been reset', 'success');
-            }
-            else if (isset($_POST['section_id']) && !empty($_POST['section_id'])) {
+            } else if (isset($_POST['section_id']) && !empty($_POST['section_id'])) {
                 // Retrieve the selected sections
+                $fid = $x->first($id);
                 $selectedSections = $_POST['section_id'];
-                
-                // Prepare other necessary data
-                $faculty_id = $_GET['id'];
+                $faculty_id = $fid->id;
                 $subject_id = $_POST['subject_id'];
-                
+
                 // Assume $handlings is an instance of your database handling class
                 foreach ($selectedSections as $section_id) {
                     $arr = [
@@ -416,16 +471,17 @@ $_POST['acads_id'] = $id;
         $subjects = $y->findAllOrder('code', 'ASC');
         $sections = $z->findAllOrder('class_course', 'ASC');
         $class = $x->classList();
-        $showHandlings = $handlings->where(['faculty_id' => $_GET['id']]);
+        $showHandlings = $handlings->where(['faculty_id' => $rows[0]->id]);
         $this->view('admin/edit_faculty', [
             'rows' => $rows, 'subjects' => $subjects, 'class' => $class, 'sections' => $sections, 'handles' => $showHandlings
         ]);
     }
 
-    
+
 
     public function deleteUser($type, $id)
     {
+        $this->auto_auth();
         $x = '';
         if ($type == "student") {
             $x = new Student();
@@ -446,6 +502,8 @@ $_POST['acads_id'] = $id;
 
     public function settingChange()
     {
+        $this->auto_auth();
+
         $setting = new Setting();
 
         if (isset($_POST['btn_settings'])) {
@@ -459,7 +517,7 @@ $_POST['acads_id'] = $id;
 
             // Check if file is uploaded
             if (!empty($_FILES['photo']['tmp_name'])) {
-                $uploadDir = '../public/resources/';
+                $uploadDir = '../public/assets/images/';
                 $uploadFile = $uploadDir . 'logo.' . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
                 $logoName = 'logo.' . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
                 $existingLogoFile = $uploadDir . $_SESSION['logo'];
@@ -470,7 +528,7 @@ $_POST['acads_id'] = $id;
                 }
 
                 // Move uploaded file to destination folder
-                if (move_uploaded_file($_FILES['photo']['tmp_name'], '../public/resources/' . 'logo.' . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION))) {
+                if (move_uploaded_file($_FILES['photo']['tmp_name'], '../public/assets/images/' . 'logo.' . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION))) {
                     // Update logo in database
                     $arr['set_logo'] = $logoName;
 
@@ -490,6 +548,7 @@ $_POST['acads_id'] = $id;
 
     public function addstudent()
     {
+        $this->auto_auth();
         $x = new Student();
         $y = new Section();
         $rows = $x->findAll();
@@ -497,11 +556,12 @@ $_POST['acads_id'] = $id;
         $classOption = $y->findAll();
 
         if (count($_POST) > 0) {
-            $_POST['stud_pass'] = '@Student01';
-            $checkId = $x->where(['stud_code' => $_POST['stud_code']]);
+            $checkId = $x->where(['code' => $_POST['code']]);
             if ($checkId) {
-                $_SESSION['errorId'] = showAlert('The Student ID "' . $_POST['stud_code'] . '" is already taken!', 'danger');
+                $_SESSION['errorId'] = showAlert('The Student ID "' . $_POST['code'] . '" is already taken!', 'danger');
             } else {
+                $_POST['stud_pass'] = password_hash('@Student01', PASSWORD_DEFAULT);
+                $_POST['token'] = random_string(60);
                 $x->insert($_POST);
                 redirect('adminpage/' . $_SESSION['currentPage']);
             }
@@ -513,15 +573,17 @@ $_POST['acads_id'] = $id;
 
     public function addfaculty()
     {
+        $this->auto_auth();
         $x = new Faculty();
         $rows = $x->findAll();
 
         if (count($_POST) > 0) {
-            $_POST['faculty_pass'] = '@Faculty01';
-            $checkId = $x->where(['faculty_code' => $_POST['faculty_code']]);
+            $checkId = $x->where(['code' => $_POST['code']]);
             if ($checkId) {
-                $_SESSION['errorId'] = showAlert('The ID "' . $_POST['faculty_code'] . '" is already taken!', 'danger');
+                $_SESSION['errorId'] = showAlert('The ID "' . $_POST['code'] . '" is already taken!', 'danger');
             } else {
+                $_POST['faculty_pass'] = password_hash('@Faculty01', PASSWORD_DEFAULT);
+                $_POST['token'] = random_string(60);
                 $x->insert($_POST);
                 redirect('adminpage/' . $_SESSION['currentPage']);
             }

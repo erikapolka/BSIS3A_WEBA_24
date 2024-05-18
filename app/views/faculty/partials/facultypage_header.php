@@ -1,13 +1,3 @@
-<?php
-session_start();
-// Check if the user is not logged in (no active session)
-if (!isset($_SESSION['userId']) || $_SESSION['currentUser'] !== 'faculty') {
-    // Redirect the user to the login page
-    redirect("404");
-    exit(); // Stop further execution of the script
-}
-// If the user is logged in, continue to the restricted page
-?>
 
 
 <!DOCTYPE html>
@@ -19,7 +9,7 @@ if (!isset($_SESSION['userId']) || $_SESSION['currentUser'] !== 'faculty') {
     <title><?= $_SESSION['systemname']?></title>
     <!-- Bootstrap CSS -->
     <base href="<?= BASEURL ?>">
-    <link rel="icon" type="image/x-icon" href="public/resources/<?= $_SESSION['logo']?>">
+    <link rel="icon" type="image/x-icon" href="public/assets/images/<?= $_SESSION['logo']?>">
     <link rel="stylesheet" href="css/main_theme.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
@@ -140,7 +130,7 @@ if (!isset($_SESSION['userId']) || $_SESSION['currentUser'] !== 'faculty') {
         <div class="container">
             <!-- Brand with logo, name, and tagline -->
             <a class="navbar-brand" href="#">
-                <img src="public/resources/<?= $_SESSION['logo'] ?>" alt="Logo" class="brand-logo">
+                <img src="public/assets/images/<?= $_SESSION['logo'] ?>" alt="Logo" class="brand-logo">
                 <div class="brand-info">
                     <div class="brand-name"><?= $_SESSION['systemname']?></div>
                     <div class="tagline"><?= $_SESSION['schoolname'] ?></div>

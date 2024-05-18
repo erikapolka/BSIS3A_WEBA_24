@@ -15,8 +15,7 @@
             <div class="modal-body">
                 <!-- Form inside the modal -->
                 <form id="settingsForm" method="post" action="<?=ROOT?>/adminpage/settings" enctype="multipart/form-data">
-                    <div class="form-group m-2">
-                        <img src="public/resources/<?= $_SESSION['logo'] ?>" alt="Logo" class="brand-logo border border-1 border-black w-25">
+                    <div class="form-group mb-2">
                         <div class="brand-info">
                             <label class="custom-file-label" for="customFile">Choose file</label>
                             <input type="file" class="custom-file-input" id="customFile" name="photo" accept="image/*">
@@ -78,7 +77,15 @@
 
 
 
-
+    <!-- JavaScript to show the modal -->
+    <?php if (!empty($adminList)) : ?>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var myModal = new bootstrap.Modal(document.getElementById("showUsersModal"));
+                myModal.show();
+            });
+        </script>
+    <?php endif; ?>
 
 
 
@@ -88,11 +95,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+
 <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
 
 
 <script>
-
 
     $(document).ready(function() {
         // Function to check window width and toggle sidebar collapse class
@@ -124,8 +131,6 @@
             $(".alert").alert('close');
         }, 5000);
         
-        
-
         const config = {
 
     search: true, // Toggle search feature. Default: false
@@ -140,6 +145,7 @@ dselect(document.querySelector('#dSelectSection'), config)
 
     });
 </script>
+
 </body>
 
 </html>

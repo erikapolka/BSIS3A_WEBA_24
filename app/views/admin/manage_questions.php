@@ -15,12 +15,12 @@
         </div>
         <div class="col-md-12 table-responsive">
             <?php foreach ($rows2 as $criterion) { ?>
-                <table class="table table-bordered table-hover table-striped table-sm">
+                <table class="table table-hover table-striped">
                     <thead class="table table-dark">
                         <tr>
-                            <th class="w-50 h4 p-2"><?= $criterion->criteria; ?></th>
+                            <th class="w-75 h4 p-3"><?= $criterion->criteria; ?></th>
                             <?php for ($i = 1; $i <= 5; $i++) : ?>
-                                <th><?= $i; ?></th>
+                                <th class="p-3"><?= $i; ?></th>
                             <?php endfor; ?>
                         </tr>
                     </thead>
@@ -30,8 +30,9 @@
                                 <?php if ($criterion->id == $question->criterias_id) { ?>
                                     <tr>
                                         <td class="p-3"><?= $question->question; ?></td> <!-- Access question property directly -->
+                                        
                                         <?php for ($i = 1; $i <= 5; $i++) : ?>
-                                            <td><input disabled type="radio" class="form-check-input" name="question_<?= $question->id; ?>_<?= $criterion->id; ?>" value="<?= $i; ?>"></td>
+                                            <td class="p-3"><input type="radio" class="form-check-input" name="question_id" value="<?= $i; ?>"></td>
                                         <?php endfor; ?>
                                     </tr>
                                 <?php } ?>

@@ -12,22 +12,23 @@
 $facultySubjectCounts = [];
 
 // Loop through each handling entry
-foreach ($handles as $handle) {
-    // Get the faculty ID from the handling entry
-    $facultyId = $handle->faculty_id;
+  if ($handles != null) {
+    foreach ($handles as $handle) {
+      // Get the faculty ID from the handling entry
+      $facultyId = $handle->faculty_id;
 
-    // Check if the faculty ID already exists in the subject counts array
-    if (!isset($facultySubjectCounts[$facultyId])) {
+      // Check if the faculty ID already exists in the subject counts array
+      if (!isset($facultySubjectCounts[$facultyId])) {
         // If not, initialize the count for this faculty member
         $facultySubjectCounts[$facultyId] = [];
-    }
+      }
 
-    // Add the subject ID to the array for this faculty member if it doesn't already exist
-    if (!in_array($handle->subject_id, $facultySubjectCounts[$facultyId])) {
+      // Add the subject ID to the array for this faculty member if it doesn't already exist
+      if (!in_array($handle->subject_id, $facultySubjectCounts[$facultyId])) {
         $facultySubjectCounts[$facultyId][] = $handle->subject_id;
+      }
     }
-}
-
+  }
 // Now $facultySubjectCounts contains the count of subjects handled by each faculty member
 ?>
 </div>
@@ -39,7 +40,7 @@ foreach ($handles as $handle) {
       <form action="" method="post">
         <div class="row">
           <div class="col-8"><input type="text" value="<?= get_var('searchBox') ?>" class="form-control mb-2" name="searchBox" placeholder="Search"></div>
-          <div class="col-1"><button type="submit" name="searchStudent" class="btn btn-secondary"><i class="fa fa-search"></i></button></div>
+          <div class="col-1"><button type="submit" name="searchFaculty" class="btn btn-secondary"><i class="fa fa-search"></i></button></div>
         </div>
       </form>
 
@@ -70,11 +71,11 @@ foreach ($handles as $handle) {
 
             foreach ($rows as $item) { ?>
               <tr>
-                <td class="py-2 px-2"><?= $item->faculty_code ?></td>
+                <td class="py-2 px-2"><?= $item->code ?></td>
                 <td class="px-5 py-2"><?= $item->faculty_lname . ", "  . $item->faculty_fname . " "  . $item->faculty_mname ?></td>
                 <td class="px-5 py-2 text-center"><?= isset($facultySubjectCounts[$item->id]) ? count($facultySubjectCounts[$item->id]) : 0 ?></td>
                 <td class="text-start py-2"><?= $item->faculty_email ?></td>
-                <td class="d-flex justify-content-center py-2"><a href='<?= ROOT ?>/adminpage/editfaculty?id=<?= $item->id ?>' class="btn btn-success">
+                <td class="d-flex justify-content-center py-2"><a href='<?= ROOT ?>/adminpage/editfaculty?id=<?= $item->token ?>' class="btn btn-success">
                     <i class="fa fa-pen"></i>
                   </a></td>
               </tr>
