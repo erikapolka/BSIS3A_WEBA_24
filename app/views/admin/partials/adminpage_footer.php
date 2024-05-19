@@ -47,7 +47,6 @@
                             $themes = array(
                                 'evamaroon' => 'Maroon',
                                 'evaorange' => 'Orange',
-                                'evayellow' => 'Yellow',
                                 'evagreen' => 'Green',
                                 'evapurple' => 'Purple',
                                 'evablue' => 'Blue',
@@ -77,15 +76,7 @@
 
 
 
-    <!-- JavaScript to show the modal -->
-    <?php if (!empty($adminList)) : ?>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                var myModal = new bootstrap.Modal(document.getElementById("showUsersModal"));
-                myModal.show();
-            });
-        </script>
-    <?php endif; ?>
+
 
 
 
@@ -139,8 +130,10 @@
     maxHeight: '360px', // Max height for showing scrollbar. Default: 360px
     size: '', // Can be "sm" or "lg". Default ''
 }
-dselect(document.querySelector('#dSelect'), config)
-dselect(document.querySelector('#dSelectSection'), config)
+dselect(document.querySelector('#dSelect'), config),
+dselect(document.querySelector('#dSelectSection'), config),
+dselect(document.querySelector('#dSelectFacultyResult'), config),
+dselect(document.querySelector('#dSelectCriteria'), config)
 
 
     });

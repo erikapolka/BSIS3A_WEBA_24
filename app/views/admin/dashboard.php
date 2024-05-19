@@ -1,8 +1,5 @@
 <?php include 'partials/adminpage_header.php'; ?>
-<?php if (!isset($_SESSION['showOnce'])) {
-    echo $_SESSION['welcome'];
-    $_SESSION['showOnce'] = true;
-} ?>
+
 <h3>Dashboard</h3>
 <div class="mt-4 shadow p-3 rounded">
     <div class="col-12 mb-3">
@@ -14,20 +11,20 @@
                         <p class="fs-5 m-0">Academic Year: <strong><?= $item->academic_year ?></strong><br>
                         <p class="fs-5"> Semester: <strong><?= $item->semester ?></strong></p>
                         <p class="fs-5">Evaluation Status: <?php
-                                                                    switch ($item->status) {
-                                                                        case '0':
-                                                                            echo '<strong class="text-secondary">Pending</strong>';
-                                                                            break;
-                                                                        case '1':
-                                                                            echo '<strong class="text-success">Ongoing</strong>';
-                                                                            break;
-                                                                        case '2':
-                                                                            echo '<strong class="text-danger">Closed</strong>';
-                                                                            break;
-                                                                        default:
-                                                                            echo 'N/A';
-                                                                    }
-                                                                    ?></p>
+                                                            switch ($item->status) {
+                                                                case '0':
+                                                                    echo '<strong class="text-secondary">Pending</strong>';
+                                                                    break;
+                                                                case '1':
+                                                                    echo '<strong class="text-success">Ongoing</strong>';
+                                                                    break;
+                                                                case '2':
+                                                                    echo '<strong class="text-danger">Closed</strong>';
+                                                                    break;
+                                                                default:
+                                                                    echo 'N/A';
+                                                            }
+                                                            ?></p>
                     <?php }; ?>
                 </div>
             </div>

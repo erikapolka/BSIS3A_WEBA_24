@@ -232,7 +232,7 @@ $currentPage = $_SESSION['currentPage'];
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- Brand with logo, name, and tagline -->
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="<?= ROOT ?>/adminpage/dashboard">
                 <img src="public/assets/images/<?= $_SESSION['logo'] ?>" alt="Logo" class="brand-logo">
                 <div class="brand-info">
                     <div class="brand-name"><?= $_SESSION['systemname'] ?></div>
@@ -245,7 +245,7 @@ $currentPage = $_SESSION['currentPage'];
                     <i class="fas fa-user"></i> <!-- Font Awesome user icon -->
                 </button>
                 <div class="dropdown-menu dropdown-menu-end" style="right: 0; left: auto;" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#"><i class="fa fa-user"></i> <strong><?= $_SESSION["fullName"]; ?></strong></a>
+                    <a class="dropdown-item" data-toggle="modal" data-target="#infoModal"><i class="fa fa-user"></i> <strong><?= $_SESSION["fullName"]; ?></strong></a>
                     <a class="dropdown-item" data-toggle="modal" data-target="#changePassModal"><i class="fa fa-lock"></i> Change Password</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" data-toggle="modal" data-target="#usersModal"><i class="fa fa-users"></i> Users</a>
@@ -279,7 +279,30 @@ $currentPage = $_SESSION['currentPage'];
             </div>
         </div>
     </div>
+    <!-- Info Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="infoModalLabel">User Information</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
 
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="m-5">
+                        <p> Code: <?= $_SESSION['USER']->code ?></p>
+                        <p>Name: <?= $_SESSION['USER']->admin_fname . ' ' . $_SESSION['USER']->admin_mname . ' ' . $_SESSION['USER']->admin_lname ?></p>
+                        <p>Email: <?= $_SESSION['USER']->admin_email ?></p>
+                        <p>Role: <?= $_SESSION['USER']->usertype ?></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Confirm Modal -->
     <div class="modal fade" id="usersModal" tabindex="-1" role="dialog" aria-labelledby="usersModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -290,7 +313,7 @@ $currentPage = $_SESSION['currentPage'];
 
                     </button>
                 </div>
-                <form action="" method="post">
+                <form action="<?= ROOT ?>/adminpage/checkusers" method="post">
                     <div class="modal-body">
                         <div class="form-group col-lg-12 col-sm-12 p-5">
                             <label for="password"><strong>Password:</strong></label>
@@ -299,7 +322,7 @@ $currentPage = $_SESSION['currentPage'];
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        
+
                         <button type="submit" class="btn btn-primary">Confirm</button>
                     </div>
                 </form>
@@ -307,32 +330,7 @@ $currentPage = $_SESSION['currentPage'];
         </div>
     </div>
 
-    <!-- Users Modal -->
-    <div class="modal fade" id="showUsersModal" tabindex="-2" role="dialog" aria-labelledby="showUsersModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="logoutModalLabel">Confirm Identity</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
 
-                    </button>
-                </div>
-                <form action="">
-                    <div class="modal-body">
-                        <div class="form-group col-lg-12 col-sm-12 p-5">
-                            <label for="password"><strong>Password:</strong></label>
-                            <input type="text" class="form-control" id="password" name="admin_pass" value="<?= $adminList[0]->admin_fname?>" required autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-
-                        <a type="submit" class="btn btn-primary">Confirm</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
 
     <!-- Change Pass Modal -->
@@ -344,7 +342,7 @@ $currentPage = $_SESSION['currentPage'];
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
                     </button>
                 </div>
-                <form action="">
+                <form action="<?= ROOT ?>/adminpage/changepass" method="post">
                     <div class="modal-body">
                         <div class="form-group m-3">
                             <label for="password"><strong>Password:</strong></label>
@@ -362,7 +360,7 @@ $currentPage = $_SESSION['currentPage'];
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 
-                        <button type="submit" class="btn btn-primary">Confirm</button>
+                        <button type="submit" name="changePass" class="btn btn-primary">Confirm</button>
                     </div>
                 </form>
             </div>
@@ -384,7 +382,7 @@ $currentPage = $_SESSION['currentPage'];
             <li><a href="<?= ROOT ?>/adminpage/facultylist" <?php if ($currentPage == 'facultyList') echo 'class="active"' ?>><i class="fa fa-chalkboard-user"></i><span>Faculties</span></a></li>
             <li><a href="<?= ROOT ?>/adminpage/studentlist" <?php if ($currentPage == 'studentList') echo 'class="active"' ?>><i class="fa fa-user-friends"></i><span>Students</span></a></li>
             <hr>
-            <li><a href="<?= ROOT ?>/adminpage/settings" class=""><i class="fa-solid fa-square-poll-vertical"></i><span><strong>RESULTS</strong></span></a></li>
+            <li><a href="<?= ROOT ?>/adminpage/result" <?php if ($currentPage == 'result') echo 'class="active"' ?>><i class="fa-solid fa-square-poll-vertical"></i><span><strong>RESULTS</strong></span></a></li>
         </ul>
     </div>
 
@@ -395,3 +393,13 @@ $currentPage = $_SESSION['currentPage'];
 
     <div class="content" id="content">
         <div class="container-fluid">
+
+            <?php if (isset($_SESSION["info"])) : ?>
+                <?php echo ($_SESSION["info"]) ?>
+                <?php unset($_SESSION["info"]); // Clear the error message from session 
+                ?>
+            <?php endif; ?>
+            <?php if (!isset($_SESSION['showOnce'])) {
+                echo $_SESSION['welcome'];
+                $_SESSION['showOnce'] = true;
+            } ?>

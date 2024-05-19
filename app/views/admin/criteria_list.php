@@ -4,7 +4,7 @@
 <h2>Criteria List</h2>
 <div class="container mt-4 shadow p-3 rounded">
 
-<div class="row">
+    <div class="row">
         <div class="col-6 col-sm-6">
             <!-- Search bar -->
 
@@ -53,9 +53,9 @@
                                             <?php if ($item->order_by != 1) : ?>
                                                 <button type="submit" name="sortUp" class="btn"><i class="fa fa-arrow-up text-secondary"></i></button>
                                             <?php endif; ?>
-                                            
+
                                             <?php if ($item->order_by != $max[0]->order_by) : ?>
-                                            <button type="submit" name="sortDown" class="btn"><i class="fa fa-arrow-down text-secondary"></i></button>
+                                                <button type="submit" name="sortDown" class="btn"><i class="fa fa-arrow-down text-secondary"></i></button>
                                             <?php endif; ?>
                                         </div>
                                     </form>
@@ -76,68 +76,70 @@
 </div>
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="addCriteriaModal" tabindex="-1" aria-labelledby="addCriteriaModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addCriteriaModalLabel">Add New Criteria</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="post">
-                    
-                        <div class="mb-3">
-                            <label for="criteria" class="form-label">Criteria:</label>
-                            <input type="text" id="criteria" name="criteria" class="form-control" placeholder="" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary d-flex justify-content-end">Save</button>
-                    </form>
-                </div>
+<!-- Modal -->
+<div class="modal fade" id="addCriteriaModal" tabindex="-1" aria-labelledby="addCriteriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCriteriaModalLabel">Add New Criteria</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-    </div>
+            <div class="modal-body">
+                <form method="post">
 
-    <!-- Edit Subject Modal -->
-    <div class="modal fade" id="editCriteriaModal" tabindex="-1" aria-labelledby="editCriteriaModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editCriteriaModalLabel">Edit Criteria</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <?php foreach ($rows2 as $row) { ?>
-
-
-                        <form method="post">
-                            
-                            <div class="mb-3">
-                                <label for="subject" class="form-label">Criteria:</label>
-                                <input type="text" name="criteria" class="form-control" value="<?= $row->criteria ?>" placeholder="" required>
-                            </div>
-                            <input type="hidden" name="id" value="<?= $row->id ?>">
-
-                        <?php } ?>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="updateCriteria" class="btn btn-primary d-flex justify-content-end">Save Changes</button>
-                    
-                </div>
+                    <div class="mb-3">
+                        <label for="criteria" class="form-label">Criteria:</label>
+                        <input type="text" id="criteria" name="criteria" class="form-control" placeholder="" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary d-flex justify-content-end">Save</button>
                 </form>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- JavaScript to show the modal -->
-    <?php if (!empty($rows2)) : ?>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                var myModal = new bootstrap.Modal(document.getElementById("editCriteriaModal"));
-                myModal.show();
-            });
-        </script>
-    <?php endif; ?>
+<!-- Edit Subject Modal -->
+<div class="modal fade" id="editCriteriaModal" tabindex="-1" aria-labelledby="editCriteriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <?php foreach ($rows2 as $row) { ?>
+                <div class="modal-header d-flex justify-content-between">
+                    <h5 class="modal-title" id="editCriteriaModalLabel">Edit Criteria</h5>
+                    <form method="post" action="<?= ROOT ?>/adminpage/deleterecord">
+                    <input type="hidden" name="redirectPage" value="criterialist">
+                        <input type="hidden" name="table_name" value="Criteria">
+                        <input type="hidden" name="id" value="<?= $row->id ?>">
+                        <button type="submit" name="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                    </form>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Criteria:</label>
+                            <input type="text" name="criteria" class="form-control" value="<?= $row->criteria ?>" placeholder="" required>
+                        </div>
+                        <input type="hidden" name="id" value="<?= $row->id ?>">
+
+                    <?php } ?>
+                </div>
+                <div class="modal-footer">
+                    <a href="<?= ROOT ?>/adminpage/criteriaList" type="button" class="btn btn-secondary">Close</a>
+                    <button type="submit" name="updateCriteria" class="btn btn-primary d-flex justify-content-end">Save Changes</button>
+
+                </div>
+                </form>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to show the modal -->
+<?php if (!empty($rows2)) : ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var myModal = new bootstrap.Modal(document.getElementById("editCriteriaModal"));
+            myModal.show();
+        });
+    </script>
+<?php endif; ?>
 
 <?php include 'partials/adminpage_footer.php'; ?>

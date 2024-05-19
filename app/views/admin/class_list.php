@@ -45,9 +45,10 @@
                         foreach ($rows as $item) { ?>
                             <tr>
                                 <td class="py-2 px-2 text-center"><?= $item->class_course . "-" . $item->class_level . $item->class_section ?></td>
-                                <td class="d-flex justify-content-center py-2"><a href='<?= ROOT ?>/adminpage/editstudent?id=<?= $item->id ?>' class="btn btn-success">
-                                        <i class="fa fa-pen"></i>
-                                    </a></td>
+                                <td class="d-flex justify-content-center py-2"><form method="post" action="">
+                                        <input type="hidden" name="id" value="<?= $item->id ?>">
+                                        <button type="submit" name="editClass" class="btn btn-success"><i class="fa fa-pen"></i></button>
+                                    </form></td>
                             </tr>
                         <?php } ?>
                     <?php } else { ?>
@@ -92,7 +93,60 @@
         </div>
     </div>
 
+<!-- Edit Subject Modal -->
+<div class="modal fade" id="editClassModal" tabindex="-1" aria-labelledby="editClassModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <?php foreach ($rows2 as $row) { ?>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editClassModalLabel">Edit Class</h5>
+                    <form method="post" action="<?= ROOT ?>/adminpage/deleterecord">
+                    <input type="hidden" name="redirectPage" value="classlist">
+                        <input type="hidden" name="table_name" value="Section">
+                        <input type="hidden" name="id" value="<?= $row->id ?>">
+                        <button type="submit" name="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                    </form>
+                </div>
+                <div class="modal-body">
+                    
 
+
+                        <form method="post">
+                        <div class="mb-3">
+                            <label for="course" class="form-label">Course:</label>
+                            <input type="text" id="course" name="class_course" class="form-control" placeholder="BSIS" value="<?= $row->class_course ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="level" class="form-label">Year Level:</label>
+                            <input type="text" id="level" name="class_level" class="form-control" placeholder="1" value="<?= $row->class_level ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="section" class="form-label">Section:</label>
+                            <input type="text" id="section" name="class_section" class="form-control" placeholder="A" value="<?= $row->class_section ?>" required>
+                        </div>
+                            <input type="hidden" name="id" value="<?= $row->id ?>">
+
+                        <?php } ?>
+                </div>
+                <div class="modal-footer">
+                    <a href="<?= ROOT ?>/adminpage/classList" type="button" class="btn btn-secondary">Close</a>
+                    <button type="submit" name="updateClass" class="btn btn-primary d-flex justify-content-end">Save Changes</button>
+                    
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to show the modal -->
+    <?php if (!empty($rows2)) : ?>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var myModal = new bootstrap.Modal(document.getElementById("editClassModal"));
+                myModal.show();
+            });
+        </script>
+    <?php endif; ?>
 
 
 

@@ -109,13 +109,11 @@ class Model extends Database
 
         if ($result) {
             return $result[0];
-        }
-        else{
+        } else {
             return false;
         }
-        
     }
-    
+
     public function insert($data)
     {
         $columns = implode(', ', array_keys($data));
@@ -173,8 +171,6 @@ class Model extends Database
     }
 
 
-
-
     public function classList()
     {
         $query = "SELECT id,concat(class_course,' - ',class_level,class_section) as `class` FROM sections";
@@ -192,4 +188,26 @@ class Model extends Database
 
         return $classList;
     }
+
+    public function getEvaluationResultsBySectionAndFaculty($sectionId, $facultyId, $academicId)
+    {
+        $query = "
+        SELECT results.question_id, results.rate, COUNT(results.rate) as rate_count
+        FROM results
+        JOIN evaluations ON results.token = evaluations.token
+        WHERE evaluations.class_id = :section_id
+        AND evaluations.faculty_id = :faculty_id
+        AND evaluations.academic_id = :academic_id
+        GROUP BY results.question_id, results.rate
+    ";
+
+        $params = [
+            'section_id' => $sectionId,
+            'faculty_id' => $facultyId,
+            'academic_id' => $academicId
+        ];
+
+        return $this->query($query, $params);
+    }
+    
 }

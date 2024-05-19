@@ -6,7 +6,7 @@ class Login extends Controller
     {
 
         if (count($_POST) > 0) {
-            $user['code'] = $_POST['code'];
+            $user = $_POST['code'];
             $pass = $_POST['pass'];
 
 
@@ -14,7 +14,12 @@ class Login extends Controller
                 $_SESSION["errors"] = showAlert('Username and Password cannot be empty.', 'danger');
             } else {
                 $student = new Student();
-                $studentResult = $student->first($user);
+                if (filter_var($user, FILTER_VALIDATE_EMAIL)) {
+                    $arr['stud_email'] = $user;
+                    $studentResult = $student->first(['stud_email'=>$_POST['code']]);
+                } else {
+                    $studentResult = $student->first(['code'=>$_POST['code']]);
+                }
                 if ($studentResult) {
                     if (password_verify($_POST['pass'], $studentResult->stud_pass)) {
                         Auth::authenticate($studentResult);
@@ -27,9 +32,14 @@ class Login extends Controller
                     }
                 } else {
                     $admin = new Admin();
-                    $adminResult = $admin->first($user);
+                    if (filter_var($user, FILTER_VALIDATE_EMAIL)) {
+                        $adminResult = $admin->first(['admin_email' => $_POST['code']]);
+                    } else {
+                        $adminResult = $admin->first(['code' => $_POST['code']]);
+                    }
+                    
                     if ($adminResult) {
-                        if ($_POST['pass'] == $adminResult->admin_pass) {
+                        if (password_verify($_POST['pass'], $adminResult->admin_pass)) {
                             Auth::authenticate($adminResult);
                             $_SESSION["fullName"] = $adminResult->admin_fname . " " . $adminResult->admin_lname;
                             $_SESSION['welcome'] = showAlert('Welcome, ' . $_SESSION["fullName"] . "(Admin)!", 'success');
@@ -40,13 +50,18 @@ class Login extends Controller
                         }
                     } else {
                         $faculty = new Faculty();
-                        $facultyResult = $faculty->first($user);
+                        if (filter_var($user, FILTER_VALIDATE_EMAIL)) {
+                            $arr['faculty_email'] = $user;
+                            $facultyResult = $faculty->first(['faculty_email'=>$_POST['code']]);
+                        } else {
+                            $facultyResult = $faculty->first(['code'=>$_POST['code']]);
+                        }
 
                         if ($facultyResult) {
-                            if ($_POST['pass'] == $facultyResult->faculty_pass) {
+                            if (password_verify($_POST['pass'], $facultyResult->faculty_pass)) {
                                 Auth::authenticate($facultyResult);
                                 $_SESSION["fullName"] = $facultyResult->faculty_fname . " " . $facultyResult->faculty_lname;
-                                $_SESSION['welcome'] = showAlert('Welcome, ' . $_SESSION["fullName"] . "(Admin)!", 'success');
+                                $_SESSION['welcome'] = showAlert('Welcome, ' . $_SESSION["fullName"] . "(Instructor)!", 'success');
                                 redirect("facultypage");
                                 exit();
                             }else {

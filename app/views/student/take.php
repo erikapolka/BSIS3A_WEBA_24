@@ -1,33 +1,52 @@
 <?php include "partials/studentpage_header.php"; ?>
 <a class="btn" data-toggle="modal" data-target="#confirmbackModal"><i class="fa fa-arrow-left text-secondary h4"></i></a>
 
-
 <div class="p-5 mx-5 border shadow rounded">
     <div>
         <form method="POST" action="">
-            <!-- Include hidden fields for required IDs -->
-            <input type="hidden" name="academic_id" value="<?= $acads_default->id; ?>">
-            <input type="hidden" name="class_id" value="<?= $student->stud_class; ?>">
-            <input type="hidden" name="stud_id" value="<?= $student->id; ?>">
-            <input type="hidden" name="subject_id" value="<?= $handles->subject_id ?>">
-            <input type="hidden" name="faculty_id" value='<?= $facultys->id; ?>'>
 
-
+            <!-- academic -->
             <div class="text-center">
                 <p class="h5"><strong><?= $_SESSION['schoolname'] ?></strong></p>
                 <p>A.Y. <?= $acads_default->academic_year ?> <br>
                     Semester <?= $acads_default->semester ?></p>
             </div>
+            <input type="hidden" name="academic_id" value="<?= $acads_default->id; ?>">
 
+            <!-- stud_id -->
             <p>Student ID: <?= $student->code ?></p>
-            <p>Name: <?= $student->stud_fname . ' ' . $student->stud_lname?></p>
+            <p>Name: <?= $student->stud_fname . ' ' . $student->stud_lname ?></p>
+            <input type="hidden" name="stud_id" value="<?= $student->id; ?>">
 
-            <p>Course, Year&Sec: <?= $sections[$student->stud_class]->class_course . '-' . $sections[$student->stud_class]->class_level .  $sections[$student->stud_class]->class_section ?></p>
+            <!-- class -->
+            <p>Course, Year&Sec: <?= $sections->class_course . '-' . $sections->class_level .  $sections->class_section ?></p>
+            <input type="hidden" name="class_id" value="<?= $sections->id; ?>">
 
-            <p>Subject: <?= $subjects[$handles->subject_id]->code ?></p>
+            <!-- subjects -->
+            <p>Subjects: 
+                <?php 
+                $subjectCodes = [];
+                foreach ($handles as $handle) {
+                    foreach ($subjects as $subject) {
+                        if ($subject->id == $handle->subject_id) {
+                            $subjectCodes[] = $subject->code;
+                        }
+                    }
+                }
+                echo implode(", ", $subjectCodes);
+                ?>
+            </p>
+            <?php foreach ($handles as $handle) { ?>
+                <input type="hidden" name="subject_id[]" value="<?= $handle->subject_id ?>">
+            <?php } ?>
+
+            <!-- instructor -->
             <p>Instructor: <?= $facultys->faculty_fname . ' ' . $facultys->faculty_lname ?></p>
+            <input type="hidden" name="faculty_id" value='<?= $facultys->id; ?>'>
 
-            <div class="text-center mt-5"><p>(5)-Always, (4)-Most of the time, (3)-Sometimes, (2)-Once in a while, (1)-Rarely</p></div>
+            <div class="text-center mt-5">
+                <p>(5)-Always, (4)-Most of the time, (3)-Sometimes, (2)-Once in a while, (1)-Rarely</p>
+            </div>
             <?php foreach ($rows2 as $criterion) { ?>
                 <table class="table table-hover table-striped">
                     <thead class="table-dark">
@@ -64,7 +83,6 @@
         </div>
     </div>
     <div class="d-flex justify-content-center">
-
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 

@@ -103,3 +103,14 @@
 <p>Student ID: <?= htmlspecialchars($student->id); ?></p>
 <p>Subject ID: <?= htmlspecialchars($handles->subject_id); ?></p>
 <p>Faculty ID: <?= htmlspecialchars($facultys->id); ?></p>
+
+
+function Header() {
+    $this->SetFont('Arial', 'B', 12);
+    $this->Cell(0, 10, $_SESSION['schoolname'], 0, 1, 'C');
+    $this->SetFont('Arial', 'B', 10);
+    $this->Cell(0, 10, 'Evaluation Results', 0, 1, 'C');
+    $this->Cell(0, 10, 'A.Y. ' . $this->academicYear , 0, 1, 'C');
+    $this->Cell(0, 10, ' Semester ' . $this->semester, 0, 1, 'C');
+    $this->Ln(10);
+}

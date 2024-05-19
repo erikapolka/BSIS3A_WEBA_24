@@ -2,7 +2,7 @@
 
 class Admin extends Model
 {
-
+    
 
     public function authenticate($username, $password)
     {

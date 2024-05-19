@@ -96,13 +96,19 @@
     <!-- Edit Subject Modal -->
     <div class="modal fade" id="editSubjectModal" tabindex="-1" aria-labelledby="ediSubjectModalLabel" aria-hidden="true">
         <div class="modal-dialog">
+        <?php foreach ($rows2 as $row) { ?>
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editSubjectModalLabel">Edit Subject</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <form method="post" action="<?= ROOT ?>/adminpage/deleterecord">
+                    <input type="hidden" name="redirectPage" value="subjectlist">
+                        <input type="hidden" name="table_name" value="Subject">
+                        <input type="hidden" name="id" value="<?= $row->id ?>">
+                        <button type="submit" name="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                    </form>
                 </div>
                 <div class="modal-body">
-                    <?php foreach ($rows2 as $row) { ?>
+                    
 
 
                         <form method="post">
@@ -119,7 +125,7 @@
                         <?php } ?>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="<?= ROOT ?>/adminpage/subjectList" type="button" class="btn btn-secondary">Close</a>
                     <button type="submit" name="updateSubject" class="btn btn-primary d-flex justify-content-end">Save Changes</button>
                     
                 </div>

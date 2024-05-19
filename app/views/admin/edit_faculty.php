@@ -4,7 +4,11 @@ foreach ($rows as $item) {
 ?>
 
     <h3><a href="<?= ROOT ?>/adminpage/facultylist"><i class="fa fa-arrow-left text-secondary"></i></a> <?= $item->faculty_fname . ' ' . $item->faculty_lname ?> - Faculty Member</h3>
-
+    <?php if (isset($_SESSION["info"])) : ?>
+        <?php echo ($_SESSION["info"]) ?>
+        <?php unset($_SESSION["info"]); // Clear the error message from session 
+        ?>
+    <?php endif; ?>
 
     <div class="row mt-4 shadow p-3 rounded">
         <div class="col-lg-7">
@@ -15,13 +19,6 @@ foreach ($rows as $item) {
                     <div class="form-group col-5">
                         <label for="faculty_id"><strong>ID</strong></label>
                         <input type="text" value="<?= $item->code ?>" class="form-control mb-3" id="faculty_id" name="code" placeholder="24-00000" required autocomplete="off">
-                    </div>
-                    <div class="form-group col-8">
-                        <?php if (isset($_SESSION["info"])) : ?>
-                            <?php echo ($_SESSION["info"]) ?>
-                            <?php unset($_SESSION["info"]); // Clear the error message from session 
-                            ?>
-                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -66,58 +63,63 @@ foreach ($rows as $item) {
                 <h5>Handled Subject/s</h5>
             </div>
             <div class="col-md-12 mb-2">
-                <?php if(!empty($handles)){?>
-                <div id="accordion" class="table-responsive">
-                    <?php foreach ($subjects as $subject) { ?>
-                        <?php
-                        // Check if the current subject is selected by the faculty
-                        $selected = false;
-                        foreach ($handles as $handle) {
-                            if ($subject->id == $handle->subject_id) {
-                                $selected = true;
-                                break;
+                <?php if (!empty($handles)) { ?>
+                    <div id="accordion" class="table-responsive">
+                        <?php foreach ($subjects as $subject) { ?>
+                            <?php
+                            // Check if the current subject is selected by the faculty
+                            $selected = false;
+                            foreach ($handles as $handle) {
+                                if ($subject->id == $handle->subject_id) {
+                                    $selected = true;
+                                    break;
+                                }
                             }
-                        }
-                        // Display the subject only if it's selected by the faculty
-                        if ($selected) {
-                        ?>
-                            <div class="card">
-                                <div class="card-header" id="heading<?= $subject->id ?>">
-                                    <h5 class="mb-0">
-                                        <button class="btn dropdown-toggle" data-toggle="collapse" data-target="#collapse<?= $subject->id ?>" aria-expanded="true" aria-controls="collapse<?= $subject->id ?>">
-                                            <?= $subject->code; ?>
-                                        </button>
-                                    </h5>
-                                </div>
+                            // Display the subject only if it's selected by the faculty
+                            if ($selected) {
+                            ?>
+                                <div class="card">
+                                    <div class="card-header" id="heading<?= $subject->id ?>">
+                                        <h5 class="mb-0">
+                                            <button class="btn dropdown-toggle" data-toggle="collapse" data-target="#collapse<?= $subject->id ?>" aria-expanded="true" aria-controls="collapse<?= $subject->id ?>">
+                                                <?= $subject->code; ?>
+                                            </button>
+                                        </h5>
+                                    </div>
 
-                                <div id="collapse<?= $subject->id ?>" class="collapse" aria-labelledby="heading<?= $subject->id ?>" data-parent="#accordion">
-                                    <div class="card-body">
-                                        <ul class="list-group">
-                                            <?php
-                                            // Iterate over the handles to find sections for this subject
-                                            $sectionsFound = false;
-                                            foreach ($handles as $handle) {
-                                                if ($subject->id == $handle->subject_id) {
-                                                    $sectionsFound = true;
-                                            ?>
-                                                    <li class="list-group-item"><?= $class[$handle->section_id] ?></li>
-                                                <?php }
-                                            }
-                                            if (!$sectionsFound) { ?>
-                                                <li class="list-group-item">No sections found for this subject</li>
-                                            <?php } ?>
-                                        </ul>
+                                    <div id="collapse<?= $subject->id ?>" class="collapse" aria-labelledby="heading<?= $subject->id ?>" data-parent="#accordion">
+                                        <div class="card-body">
+                                            <ul class="list-group">
+                                                <?php
+                                                // Iterate over the handles to find sections for this subject
+                                                $sectionsFound = false;
+                                                foreach ($handles as $handle) {
+                                                    if ($subject->id == $handle->subject_id) {
+                                                        $sectionsFound = true;
+                                                ?>
+                                                        <li class="list-group-item"><div class="d-flex
+                                                        justify-content-between align-items-center"><?= $class[$handle->section_id] ?><form method="post" action="">
+                                                                <input type="hidden" name="id" value="<?= $handle->id ?>">
+                                                                <button type="submit" name="deleteFacSubject" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                                            </form></div>
+                                                        </li>
+                                                    <?php }
+                                                }
+                                                if (!$sectionsFound) { ?>
+                                                    <li class="list-group-item">No sections found for this subject</li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            <?php } ?>
                         <?php } ?>
-                    <?php } ?>
-                </div>
+                    </div>
                 <?php } else { ?>
-                        
-                                <p class="mt-3 text-center">No record found</p>
-                            
-                    <?php } ?>
+
+                    <p class="mt-3 text-center">No record found</p>
+
+                <?php } ?>
             </div>
 
 

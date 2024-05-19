@@ -14,7 +14,7 @@
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 
-<body class="container bg-light" style=" font-family: Poppins; background-image: url('../public/assets/images/login_bg.png');  background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
+<body class="container bg-light" style=" font-family: Poppins; background-image: url('../public/assets/images/hello.jpg');  background-repeat: no-repeat; background-attachment: fixed; background-size: cover;">
     <div class="container-fluid my-5">
         <div class="container d-flex justify-content-center align-items-center">
             <img src="../public/assets/images/<?= $_SESSION['logo'] ?>" style="height: 9.375rem;" alt="">
@@ -46,7 +46,7 @@
                             <div class="col-lg-11">
                                 <div class="form-group d-flex align-items-center mb-3">
                                     <i class="fa fa-user fa-2x text-<?= $theme ?>"></i>
-                                    <input type="text" name="code" id="id" autocomplete="off" value="<?= get_var('code') ?>" class="form-control" placeholder="Username" style="margin-left: .5rem;" />
+                                    <input type="text" name="code" id="id" autocomplete="off" value="<?= get_var('code') ?>" class="form-control" placeholder="ID/Email" style="margin-left: .5rem;" />
 
                                 </div>
                                 <div class="form-group d-flex align-items-center">
